@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC "-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN" "http://java.sun.com/dtd/application_1_3.dtd">
+<application id="Application_ID">
+<display-name>Saba-Enterprise-Management</display-name>
+<description>Saba-Enterprise-Management</description>
+<module>
+<web>
+<web-uri>saba.war</web-uri>
+<context-root>/Saba</context-root>
+</web>
+</module>
+<module>
+<web>
+<web-uri>axis.war</web-uri>
+<context-root>/axis</context-root>
+</web>
+</module>
+<module>
+<web>
+<web-uri>slide.war</web-uri>
+<context-root>/slide</context-root>
+</web>
+</module>
+<module>
+<ejb>saba_EJB.jar</ejb>
+</module>
+<module>
+<java>customization.jar</java>
+</module>
+<module>
+<java>saba.jar</java>
+</module>
+<security-role id="sabaguest">
+<description>Guest privileges to the Saba application</description>
+<role-name>sabaguest</role-name>
+</security-role>
+<security-role id="sabauser">
+<description>Any valid Saba user including guest</description>
+<role-name>sabauser</role-name>
+</security-role>
+<security-role id="sabaadmin">
+<description>Saba Administrator</description>
+<role-name>sabaadmin</role-name>
+</security-role>
+</application>

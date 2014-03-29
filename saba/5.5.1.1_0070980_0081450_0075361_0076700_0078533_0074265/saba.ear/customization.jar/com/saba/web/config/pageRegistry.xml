@@ -1,0 +1,904 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages>
+	<!--  <page id="" type="picker" component="" href="">   <param
+        name="name" value="value"/>   <finderObject value=""/>
+        <finderId value=""/>   <pickerSearchAttr value=""/>   <widthType
+value="default"/>   <height value="300"/>  </page>  -->
+	<page component="Portlet" href="/platform/presentation/portal/pickPortlet.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kPortletMetaFinder"/>
+	</page>
+	
+	<page component="Language" href="/learning/learningoffering/offering/pickLanguage.rdf" id="40768" type="picker">
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.LanguageAutoCompleteHandler"/>
+	</page>
+	<page component="Goal Assignment" href="/goal/pickGoalAssignment.rdf" id="" type="picker"/>
+	<page component="Account Info" href="/learning/pickAccountInfo.rdf" id="" type="picker"/>
+	<page component="TalentPoolCandidate" href="/talent/talentpool/talentPoolCandidatePicker.rdf" id="" type="picker"/>
+	<page component="TalentPoolTargetSuccessor" href="/talent/talentpool/talentPoolTargetSuccessor.rdf" id="" type="picker"/>
+	<page component="Account Info" href="/learning/pickAccountInfo.rdf" id="" type="picker"/>
+	<page component="PersonPicker" href="/common/party/person/searchPeoplePopup.rdf" id="" type="picker">
+		<param name="showIntExtLov" value="true"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="200"/>
+		<widthType value="wide"/>
+		<height value="500"/>
+	</page>
+	<page component="PersonPickerShowTerminatedConds" href="/common/party/person/searchPeoplePopup.rdf" id="" type="picker">
+		<param name="showIntExtLov" value="true"/>
+		<param name="showTerminatedConds" value="true"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="200"/>
+		<widthType value="wide"/>
+		<height value="500"/>
+	</page>
+	<page component="PersonPickerDontShowTerminatedConds" href="/common/party/person/searchPeoplePopup.rdf" id="" type="picker">
+		<param name="showIntExtLov" value="true"/>
+		<param name="showTerminatedConds" value="false"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="200"/>
+		<widthType value="wide"/>
+		<height value="500"/>
+	</page>
+	<page component="TeamPersonPicker" href="/common/party/person/searchPeoplePopup.rdf" id="" type="picker">
+		<param name="showIntExtLov" value="true"/>
+		<param name="isManagerSearch" value="true"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="200"/>
+		<widthType value="wide"/>
+		<height value="500"/>
+	</page>
+	<page component="ImpressionPersonPicker" href="/performance/impression/impressionPeoplePicker.rdf" id="" type="picker">
+		<param name="showIntExtLov" value="true"/>
+		<param name="fromImpression" value="true"/>
+		<param name="boxWidth" value="200"/>
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.ImpressionPersonAutoCompleteHandler"/>
+		<widthType value="830"/>
+		<height value="500"/>
+	</page>
+	<page component="GoalAssignment" href="/performance/goal/searchGoalPopup.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kAdvanceSearchGoalFinder"/>
+		<param name="GoalConstants_kFindMode" value="GoalConstants_kNewSearch"/>
+		<param name="sessionKey" value=""/>
+		<param name="GoalConstants_kPopup" value="true"/>
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.GoalAutoCompleteHandler"/>
+		<widthType value="wider"/>
+		<height value="500"/>
+	</page>
+	<page component="MyGoalAssignment" href="/performance/goal/searchGoalPopup.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kAdvanceSearchGoalFinder"/>
+		<param name="GoalConstants_kFindMode" value="GoalConstants_kNewSearch"/>
+		<param name="sessionKey" value=""/>
+		<param name="GoalConstants_kPopup" value="true"/>
+		<param name="findMyGoalAssignment" value="true"/>
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.GoalAutoCompleteHandler"/>
+		<widthType value="wider"/>
+		<height value="500"/>
+	</page>
+	<page component="Domain" href="/platform/appframework/domain/pickDomain.rdf" id="" type="picker">
+		<param name="autoCompleteHandler" value="com.saba.autocomplete.DomainAutoCompleteHandler"/>
+		<height value="500"/>
+	</page>
+	<page component="DomainFilterByPersoncompPriv" href="/platform/appframework/domain/pickDomain.rdf" id="" type="picker">
+		<param name="autoCompleteHandler" value="com.saba.autocomplete.DomainAutoCompleteHandler"/>
+		<param name="person_priv_check" value="true"/>
+	</page>
+	<page component="Audience Type" href="/learning/audienceType/pickAudienceType.rdf" id="30124" type="picker">
+		<param name="component" value="Audience Type"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kAudienceTypeMetaFinder"/>
+		<param name="contextName" value="autocompletetype"/>
+	</page>
+	<page component="Audience SubType" href="/learning/audienceType/pickAudienceType.rdf" id="30124" type="picker">
+		<param name="component" value="Audience SubType"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kAudienceTypeMetaFinder"/>
+		<param name="contextName" value="autocompletesubtype"/>
+	</page>
+	<page component="Audience Type and SubType" href="/learning/audienceType/pickAudienceType.rdf" id="30124" type="picker">
+		<param name="component" value="Audience Type and SubType"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kAudienceTypeMetaFinder"/>
+	</page>
+	<page component="Price List Owner" href="/learning/audienceType/pickAudienceType.rdf" id="30124" type="picker">
+		<param name="component" value="Audience Type and SubType"/>
+		<param name="fromPriceList" value="true"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kAudienceTypeMetaFinder"/>
+	</page>
+	<page component="ReviewForm" href="/performance/review/reviewFormPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kReportReviewFormPickerSQL"/>
+	</page>
+	<page component="ReviewFormNoDomain" href="/performance/review/reviewFormPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kReportReviewFormPickerSQL"/>
+		<param name="domainCheck" value="false"/>
+	</page>
+	<page component="ComplexRole" href="/platform/appframework/security/searchRolePopup.rdf" id="20283" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kFindAllSecurityRoles"/><!--70341-->
+		<param name="pickDisplay" value="name"/>
+	</page>
+	<page component="ProxyUser" href="/common/common/pickProxyUser.rdf" id="" type="picker"/>
+	<page component="CompetencyLevel" href="/common/competency/pickCompetencyLevel.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kCompetencyLevelMetaFinder"/>
+	</page>
+	<page component="Person, Internal" href="/common/party/person/searchPeoplePopup.rdf" id="30035" type="picker">
+		<param name="component" value="Person, Internal"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="200"/>
+		<widthType value="wide"/>
+	</page>
+	<page component="PositionIncumbent" href="/common/party/person/searchPeoplePopup.rdf" id="30035" type="picker">
+		<param name="component" value="Person, Internal"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="showPosition" value="true"/>
+		 <widthType value="wider"/>
+        <param name="boxWidth" value="300"/>
+	</page>
+	<page component="Initiative" href="/performance/initiative/pickInitiative.rdf" id="60210" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kInitiativeGoalMetaFinder"/>
+	</page>
+	<page component="Person, External" href="/common/party/person/searchPeoplePopup.rdf" id="30035" type="picker">
+		<param name="component" value="Person, External"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="200"/>
+		<widthType value="wide"/>
+	</page>
+	<page component="Location" href="/learning/resource/location/pickLocation.rdf" id="40070" type="picker">
+		<param name="component" value="Location"/>
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.LocationAutoCompleteHandler"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kLocationMetaFinder"/>
+	</page>
+	<page component="Category" href="/learning/support/nlevel/pickFolder.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kFolderMetaFinder"/>
+		<param name="fromCategoryPicker" value="true"/>	
+		<param name="folderType" value="400"/>
+	</page>
+	<page component="Organization, Internal" href="/common/party/organization/pickOrganization.rdf" id="30354" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kOrganizationMetaFinder"/>
+		<param name="orgType" value="Internal"/>
+		<param name="contextName" value="autocomplete_internal"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.OrgAutoCompleteHandler"/>
+	</page>
+	<page component="Position Organization" href="/common/party/organization/pickOrganization.rdf" id="30354" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kOrganizationMetaFinder"/>
+		<param name="orgType" value="Internal"/>		
+		<param name="contextName" value="autocomplete_internal"/>
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.PositionOrganizationAutoCompleteHandler"/>
+	</page>
+	<page component="Organization, External" href="/common/party/organization/pickOrganization.rdf" id="30354" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kOrganizationMetaFinder"/>
+		<param name="orgType" value="External"/>
+		<param name="contextName" value="autocomplete_external"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.OrgAutoCompleteHandler"/>
+	</page>
+	<page component="Organization" href="/common/party/organization/pickOrganization.rdf" id="30354" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kOrganizationMetaFinder"/>
+		<param name="showOrgTypeLov" value="true"/>
+		<param name="contextName" value="autocomplete_org"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.OrgAutoCompleteHandler"/>
+	</page>
+	<page component="Certification" href="/learning/certification/pickCertification.rdf" id="40651" type="picker">
+		<param name="activeCertificationsOnly" value="false"/>
+		<param name="baseType" value="0"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kCertificationMetaFinder"/>
+		<param name="contextName" value="autocomplete_certi"/>
+	</page>
+	<page component="Curriculum" href="/learning/certification/pickCertification.rdf" id="40652" type="picker">
+		<param name="activeCurriculaOnly" value="false"/>
+		<param name="baseType" value="1"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kCertificationMetaFinder"/>
+		<param name="contextName" value="autocomplete_curr"/>
+	</page>
+	<page component="Desktop" href="/platform/presentationframework/pickDesktop.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/><!--70241-->
+		<param name="finderName" value="kDesktopMetaFinder"/>
+	</page>
+	<page component="DestkopDomainRel" href="/platform/presentationframework/pickDestkopDomainRel.rdf" id="" type="picker"/>
+	<page component="Role" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kRoleMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="30074"/>
+		<param name="pickResourceBundle" value="common"/>
+	</page>
+	<page component="Competency" href="/common/competency/pickCompetency.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kCompetencyMetaFinder"/>
+	</page>
+	<page component="OfferingKeyword" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kKeywordMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="keywordName"/>
+		<param name="conditionName" value="keywordName"/>
+		<param name="pickPageId" value="40656"/>
+		<param name="pickResourceBundle" value="learning"/>
+		<param name="pageComponentLabel" value="kI18n40656OfferingKeyword"/>
+	</page>
+	<page component="JobFamily" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kJobFamilyMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="30066"/>
+		<param name="pickResourceBundle" value="common"/>
+	</page>
+	<!--page component="Location"
+href="/learning/resource/location/pickLocation.rdf" id="40070" type="picker"/-->
+	<page component="TrainingUnitAgreement" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kTrainingUnitAgreementMetaFinderForSearch"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplayId" value="1"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40299"/>
+		<param name="pickResourceBundle" value="learning"/>
+		<param name="contextName" value="picker"/>
+		<param name="boxWidth" value="300"/>
+	</page>
+	<page component="PlayerTemplate" href="/content/onlineplayer/pickPlayerTemplate.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kPlayerTemplateMetaFinder"/>
+	</page>
+	<page component="ContentInventoryProduction" href="/content/contentinventory/pickContentInventoryName.rdf" id="" type="picker">
+		<param name="folderType" value="300"/>
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kCInvMetdataSearchMetaFinder"/>
+		<param name="contextName" value="auto_complete_production"/>
+	</page>
+	<page component="ContentInventoryKnowledgebase" href="/content/contentinventory/pickContentInventoryName.rdf" id="" type="picker">
+		<param name="folderType" value="400"/>
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kCInvMetdataSearchMetaFinder"/>
+		<param name="contextName" value="auto_complete_kb"/>
+	</page>
+	<page component="ContentInventoryAll" href="/content/contentinventory/pickContentInventoryName.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kCInvMetdataSearchMetaFinder"/>
+		<param name="contextName" value="auto_complete_all"/>
+		<param name="allowKBSearch" value="true"/>
+	</page>
+	<page component="Evaluation" href="/content/contentinventory/pickContentInventoryName.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kCInvMetdataSearchMetaFinder"/>
+		<param name="folderType" value="300"/>
+		<param name="evaluation" value="true"/>
+		<param name="isMultiSelect" value="false"/>
+		<param name="contextName" value="auto_complete_evaluation"/>
+	</page>
+	<page component="Facility" href="/learning/resource/facility/pickFacility.rdf" id="40071" type="picker">
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.FacilityAutoCompleteHandler"/>
+	</page>
+	<page component="Classrooms" href="/common/picker/genericPicker.rdf" id="40072" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kClassroomsMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40072"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="Equipment" href="/common/picker/genericPicker.rdf" id="40073" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kEquipmentMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="description"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40073"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="Inventory" href="/common/picker/genericPicker.rdf" id="40074" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kInventoryMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40074"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="EquipmentType" href="/common/picker/genericPicker.rdf" id="40076" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kEquipmentTypeMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40076"/>
+		<param name="pickResourceBundle" value="learning"/>
+		<param name="pageComponentLabel" value="kI18n40076EquipmentType"/>
+	</page>
+	<page component="InventoryType" href="/common/picker/genericPicker.rdf" id="40077" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kInventoryTypeMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40077"/>
+		<param name="pickResourceBundle" value="learning"/>
+		<param name="pageComponentLabel" value="kI18n40077InventoryType"/>
+	</page>
+	<page component="Offering Template" href="/learning/learningoffering/offeringTemplate/pickOt.rdf" id="40079" type="picker">
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.OfferingTemplateAutoCompleteHandler"/>
+	</page>
+	<page component="Offering Template ID" href="/learning/learningoffering/offeringTemplate/pickOtID.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kOfferingTemplateMetaFinder"/>
+		<param name="contextName" value="autocomplete_id"/>
+	</page>
+	<page component="Delivery Mode" href="/common/picker/genericPicker.rdf" id="40080" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kDeliveryModeMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="offer_title"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40080"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="ILT Offering" href="/common/picker/genericPicker.rdf" id="40081" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kPublicClassesMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="offer_title"/>
+		<param name="pickPageId" value="40081"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="WBT Offering" href="/common/picker/genericPicker.rdf" id="40082" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kWBTOfferingMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="offer_title"/>
+		<param name="pickPageId" value="40082"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="VoD Offering" href="/common/picker/genericPicker.rdf" id="40083" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kVODOfferingMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="offer_title"/>
+		<param name="pickPageId" value="40083"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="Remote Lab Offering" href="/common/picker/genericPicker.rdf" id="40084" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kRemoteLabOfferingMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="offer_title"/>
+		<param name="pickPageId" value="40084"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="Simulation Offering" href="/common/picker/genericPicker.rdf" id="40085" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kSimulationOfferingMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="offer_title"/>
+		<param name="pickPageId" value="40085"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="Virtual Class Offering" href="/common/picker/genericPicker.rdf" id="40086" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kVirtualClassroomOfferingMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="offer_title"/>
+		<param name="pickPageId" value="40086"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="JobType" href="/common/function/pickJobType.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kJobTypeMetaFinder"/>
+		<param name="showClosed" value="false"/>
+		<param name="autoCompleteHandler" value="com.saba.autocomplete.JobTypeAutoCompleteHandler"/>
+		<widthType value="wider"/>
+		<height value="500"/>
+	</page>
+	<page component="CompetencyGroup" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kCompetencyGroupMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<condition>
+			<attribute value="name"/>
+			<operation value="set"/>
+			<operator value="kLike"/>
+		</condition>
+		<condition>
+			<attribute value="name1"/>
+			<operation value="remove"/>
+			<operator/>
+		</condition>
+		<condition>
+			<attribute value="name2"/>
+			<operation value="add"/>
+			<operator value="kLike"/>
+		</condition>
+		<param name="pickPageId" value="30098"/>
+		<param name="pickResourceBundle" value="common"/>
+	</page>
+	<page component="Purchase Order" href="/learning/order/purchaseorder/pickPurchaseOrder.rdf" id="40664" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kPurchaseOrderMetaFinder"/>
+	</page>
+	<page component="Component" href="/platform/system/component/pickComponent.rdf" id="20294" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kComponentFinder"/>
+		<param name="autoCompleteHandler" value="com.saba.autocomplete.ComponentAutoCompleteHandler"/>	
+		<param name="boxWidth" value="400"/>	
+	</page>
+	<page component="Team" href="/collaboration/team/pickTeam.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CollaborationFinder"/>
+		<param name="finderName" value="kTeamMetaFinder"/>
+	</page>
+	<page component="TeamRole" href="/collaboration/team/pickTeamRole.rdf" id="" type="picker"/>
+	<page component="TeamMemRel" href="/collaboration/team/pickTeamMemRel.rdf" id="" type="picker"/>
+	<page component="TeamObjRel" href="/collaboration/team/pickTeamObjRel.rdf" id="" type="picker"/>
+	<page component="Offering" href="/learning/learningoffering/pickOffering.rdf" id="40703" type="picker">
+		<param name="pickerMode" value="true"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kOfferingsMetaFinder"/>
+	</page>
+	<page component="OfferingTitle" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kOfferingsMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>		
+		<param name="pickPageId" value="41084"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="OfferingID" href="/learning/learningoffering/pickOfferingID.rdf" id="" type="picker">
+		<param name="searchType" value="searchByOffering"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kOfferingsMetaFinder"/>
+		<param name="contextName" value="autocompleteid"/>
+	</page>
+	
+	<page component="VLEEventInfo" href="/content/vleprovider/pickVLEEventInfo.rdf" id="" type="picker"/>
+	<page component="VLEProvider" href="/content/vleprovider/pickVLEProvider.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kVLEProviderMetaFinder"/>
+	</page>
+	<page component="Session Template" href="/learning/sessionTemplate/pickSessionTemplate.rdf" id="40741" type="picker">
+		<param name="autoCompleteHandler" value="com.saba.client.learningoffering.sessiontemplate.SessionTemplateAutoCompleteHandler"/>
+		<param name="boxWidth" value="400"/>
+	</page>
+	<page component="Theme" href="/platform/presentation/uiframework/pickTheme.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kThemeMetaFinder"/>
+	</page>
+	<page component="ThemePaletteItem" href="/platform/presentation/uiframework/pickThemePaletteItem.rdf" id="" type="picker"/>
+	<page component="Manufacturer" href="/learning/resource/manufacturer/pickManufacturer.rdf" id="40757" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kFindmanufacturer"/>
+	</page>
+	<page component="Vendor" href="/learning/resource/vendor/pickVendor.rdf" id="40756" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kFindvendor"/>
+	</page>
+	<page component="DLElemMap" href="/common/distributionlist/pickDLElemMap.rdf" id="" type="picker"/>
+	<page component="Currency" href="/learning/order/purchaseorder/pickCurrency.rdf" id="40769" type="picker">
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.CurrencyAutoCompleteHandler"/>
+	</page>
+	<page component="MediaRepository" href="/platform/media/pickMediaRepository.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kMediaRepository"/>
+	</page>
+	<page component="ContentFolderProduction" href="/content/contentinventory/pickContentFolder.rdf" id="" type="picker">
+		<param name="folderType" value="300"/>
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kContentFolderMetaFinderAutoComplete"/>
+		<param name="contextName" value="auto_complete_production"/>
+	</page>	
+	
+	<page component="ContentFolderKB" href="/content/contentinventory/pickContentFolder.rdf" id="" type="picker">
+		<param name="folderType" value="400"/>
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kContentFolderMetaFinderAutoComplete"/>
+		<param name="contextName" value="auto_complete_kb"/>
+	</page>
+	<page component="ContentFolder" href="/content/contentinventory/pickContentFolder.rdf" id="" type="picker"/>
+	
+	<page component="InterestList" href="/content/contentinventory/pickInterestList.rdf" id="" type="picker"/>
+	<page component="QuestionStatus" href="/collaboration/qa/pickQuestionStatus.rdf" id="" type="picker"/>
+	<page component="QACategory" href="/collaboration/qa/pickQACategory.rdf" id="" type="picker"/>
+	<page component="QACatRel" href="/collaboration/qa/pickQACatRel.rdf" id="" type="picker"/>
+	<page component="SabaPackage" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kPackageMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40878"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="Skin" href="/platform/presentation/uiframework/pickSkin.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kSkinMetaFinder"/><!--70225-->
+	</page>
+	<page component="PackageItem" href="/learning/sabapackage/pickPackageItem.rdf" id="" type="picker"/>
+	<page component="Prospect" href="/common/party/pickProspect.rdf" id="" type="picker"/>
+	<page component="DistributionList" href="/common/distributionlist/pickDistributionList.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kDistributionListMetaFinder"/>
+	</page>
+	<page component="TrainingUnit" href="/learning/trainingunit/pickTrainingUnit.rdf" id="40834" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kTrainingUnitMetaFinder"/>
+	</page>
+	<page component="TalentPool" href="/talent/talentpool/pickTalentPool.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.TalentFinder"/>
+		<param name="finderName" value="kTalentPoolMetaFinder"/>
+		<param name="autoCompleteHandler" value="com.saba.client.talentpool.TalentPoolAutoCompleteHandler"/>
+	</page>
+	<page component="MarketingCampaign" href="/learning/marketingcampaign/pickMarketingCampaign.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kMarketingCampaignMetaFinder"/>
+	</page>
+	<page component="DiscountEntries" href="/learning/trainingunit/pickDiscountEntries.rdf" id="" type="picker"/>
+	<page component="PersonIMInfo" href="/common/party/pickPersonIMInfo.rdf" id="" type="picker"/>
+	<page component="Locale" href="/platform/bframework/i18n/pickLocale.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kLocaleMetaFinder"/><!--70106-->
+	</page>
+	<page component="FieldOfStudy" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kFieldOfStudyMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="40822"/>
+		<param name="pickResourceBundle" value="learning"/>
+	</page>
+	<page component="activeFieldOfStudy" href="learning/continuingeducation/pickFieldOfStudy.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kFieldOfStudyMetaFinder"/>
+	</page>
+	<page component="Survey" href="/common/survey/pickSurvey.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kSurveyByNameFinder"/>
+	</page>
+	<page component="MRA" href="/common/mra/pickMraQuestionnaire.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kMRAQuestionnaireByNameFinder"/>
+	</page>
+	<page component="ReviewCycleCriteria" href="/performance/review/pickReviewCycle.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kReviewCycleMetaFinder"/>
+	</page>
+	
+	<page component="Review Cycle" href="/performance/review/reviewCyclePicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kReviewCycleMetaFinder"/>
+	</page>
+	<page component="PlanType" href="/common/plan/pickPlanType.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kPlanTypeMetaFinder"/>
+		<param name="boxWidth" value="270"/>
+		<param name="contextName" value="plan_type_all"/>
+	</page>
+	<page component="PlanTypeEnabled" href="/common/plan/pickPlanType.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kPlanTypeMetaFinder"/>
+		<param name="status" value="100"/>
+		<param name="boxWidth" value="270"/>
+		<param name="contextName" value="plan_type_enabled"/>
+	</page>
+	<page component="Plan" href="/common/plan/pickPlan.rdf" id="" type="picker">
+		<param name="autoCompleteHandler" value="com.saba.client.plan.PlanAutoCompleteHandler"/>
+	</page>
+	<page component="MTDomainRelation" href="/platform/appframework/pickMTDomainRelation.rdf" id="" type="picker"/>
+	<page component="PlanForm" href="/common/plan/pickPlanForm.rdf" id="30625" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kPlanFormMetaFinder"/>
+		<param name="boxWidth" value="300"/>
+		<param name="showDisabled" value="false"/>
+		<param name="contextName" value="plan_form_enabled"/>
+	</page>
+	<page component="PlanFormAll" href="/common/plan/pickPlanForm.rdf" id="30625" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kPlanFormMetaFinder"/>
+		<param name="boxWidth" value="300"/>
+		<param name="showDisabled" value="true"/>
+		<param name="contextName" value="plan_form_all"/>
+	</page>
+	<page component="PersonPickerWithFullName" href="/common/party/person/searchPeoplePopup.rdf" id="" type="picker">
+		<param name="showIntExtLov" value="true"/>
+		<param name="returnFullName" value="true"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="150"/>
+		<widthType value="wide"/>
+		<height value="500"/>
+	</page>
+	<page component="DiscussionForum" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="contextName" value="picker_forum"/>
+		<param name="finderClass" value="com.saba.finder.CollaborationFinder"/>
+		<param name="finderName" value="kDiscussionForumAdminByTeam"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickPageId" value="70077"/>
+		<param name="pickResourceBundle" value="collaboration"/>
+		<widthType value="wide"/>
+		<height value="500"/>
+	</page>
+	<page component="OfferingPickerWithID" href="/learning/learningoffering/pickOfferingID.rdf" id="" type="picker">
+		<param name="searchType" value="searchByOffering"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kOfferingsMetaFinder"/>
+		<param name="contextName" value="autocompleteid"/>
+		<param name="returnOfferingId" value="true"/>
+	</page>
+    <page component="Position" href="/common/position/pickPosition.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kPositionFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="position_id"/>
+		<param name="conditionName" value="position_title"/>
+		<param name="pickPageId" value="30766"/>
+		<param name="pickResourceBundle" value="common"/>
+        <param name="autoCompleteHandler" value="com.saba.client.position.PositionAutoCompleteHandler"/>
+        <widthType value="wider"/>
+        <param name="boxWidth" value="300"/>
+        <height value="500"/>
+	</page>
+     <page component="TeamPositions" href="/common/position/pickPosition.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kPositionFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="position_id"/>
+		<param name="conditionName" value="position_title"/>
+		<param name="pickPageId" value="30766"/>
+		<param name="pickResourceBundle" value="common"/>
+        <param name="restrictToTeam" value="true"/>
+        <param name="autoCompleteHandler" value="com.saba.client.position.PositionAutoCompleteHandler"/>
+        <widthType value="wider"/>
+        <param name="boxWidth" value="300"/>
+		<height value="500"/>
+	</page>
+    <page component="GenericUserLov" href="/common/picker/genericLovPicker.rdf" id="" type="picker">
+		<widthType value="wider"/>
+		<height value="500"/>
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kGenericLovPicker"/>
+		<param name="autoCompleteHandler" value="com.saba.client.offeringrequest.GenericLovPickerAutoCompleteHandler"/>
+	</page>	
+	<page component="UserLov" href="/common/profile/userLovPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kUserLovFinder"/>
+		<param name="autoCompleteHandler" value="com.saba.autocomplete.UserLovAutoCompleteHandler"/>
+	</page>
+	<page component="Descriptor" href="/common/dlov/pickDescriptor.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CommonFinder"/>
+		<param name="finderName" value="kDescriptorMetaFinder"/>
+		<param name="autoCompleteHandler" value="com.saba.client.position.descriptor.DescriptorAutoCompleteHandler"/>
+		<param name="descriptorId" value="4"/>
+	</page>	
+	<page component="Tenant" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kFetchAllTenants"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="conditionName" value="name"/>
+		<condition>
+			<attribute value="name"/>
+			<operation value="set"/>
+			<operator value="kLike"/>
+		</condition>
+		<param name="pickPageId" value="20024"/>
+		<param name="pickResourceBundle" value="platform"/>
+	</page>
+	<page component="ContentFolderAll" href="/content/contentinventory/pickContentFolder.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.ContentFinder"/>
+		<param name="finderName" value="kContentFolderMetaFinderAutoComplete"/>
+		<param name="contextName" value="auto_complete_all"/>
+	</page>
+	<page component="OfferingTemplatePickerWithID" href="/learning/learningoffering/offeringTemplate/pickOtID.rdf" id="" type="picker">
+			<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+			<param name="finderName" value="kOfferingTemplateMetaFinder"/>
+			<param name="contextName" value="autocomplete_id"/>
+			<param name="returnOfferingTemplateId" value="true"/>
+	</page>	
+	<page component="AssessmentTheme" href="/platform/presentation/uiframework/pickTheme.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kThemeMetaFinder"/>
+		<param name="contextName" value="autocomplete_assessment"/>
+	</page>
+	<page component="ValidCertification" href="/learning/certification/pickCertification.rdf" id="" type="picker">
+		<param name="activeCertificationsOnly" value="false"/>
+		<param name="baseType" value="0"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kCertificationMetaFinder"/>
+		<param name="contextName" value="autocomplete_certi"/>
+		<param name="autoCompleteHandler" value="com.saba.client.certification.CertificationAutoCompleteHandler"/>
+	</page>
+	<page component="ValidCurriculum" href="/learning/certification/pickCertification.rdf" id="" type="picker">
+		<param name="activeCurriculaOnly" value="false"/>
+		<param name="baseType" value="1"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kCertificationMetaFinder"/>
+		<param name="contextName" value="autocomplete_curr"/>
+		<param name="autoCompleteHandler" value="com.saba.client.certification.CertificationAutoCompleteHandler"/>
+	</page>
+	<page component="ValidCertificationCurriculum" href="/learning/certification/pickCertification.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="callerContext" value="searchcertcurricula"/>
+		<param name="finderName" value="kCertificationMetaFinder"/>
+		<param name="contextName" value="autocomplete_certi_curri"/>
+		<param name="autoCompleteHandler" value="com.saba.client.certification.CertificationAutoCompleteHandler"/>
+	</page>
+	<page component="Program" href="/learning/certification/searchBlendedProgramPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kBlendedProgramMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickerMode" value="true"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="pickPageId" value="41048"/>
+		<param name="boxWidth" value="350"/>
+		<param name="pickResourceBundle" value="learning"/>
+		<param name="pageComponentLabel" value="kI18n41048Program"/>
+	</page>
+	<page component="InternalTeamPicker" href="/common/party/person/searchPeoplePopup.rdf" id="30035" type="picker">
+		<param name="component" value="Person, Internal"/>
+		<param name="teamType" value="directIndirect"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="200"/>
+		<widthType value="wide"/>
+	</page>
+	<page component="InternalAlternateTeamPicker" href="/common/party/person/searchPeoplePopup.rdf" id="30035" type="picker">
+		<param name="component" value="Person, Internal"/>
+		<param name="teamType" value="alternate"/>
+		<param name="autoCompleteHandler" value="com.saba.client.party.presentation.PersonFinderAutoCompleteHandler"/>
+		<param name="boxWidth" value="200"/>
+		<widthType value="wide"/>
+	</page>
+	<page component="ReportEngine" href="/platform/services/report/pickReportEngine.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kReportEngineMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="pickPageId" value="20488"/>
+		<param name="pickResourceBundle" value="platform"/>
+		<param name="conditionName" value="name"/>
+		<param name="autoCompleteHandler" value="com.saba.client.report.ReportEngineAutoCompleteHandler"/>
+	</page>
+   <page component="ReportModel" href="/common/picker/genericPicker.rdf" id="" type="picker">
+ 		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kReportModelMetaFinder"/>
+		<param name="conditionName" value="name"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="pickPageId" value="20465"/>
+		<param name="pickResourceBundle" value="platform"/>
+	</page>
+	<page component="ReportCategory" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kCategoryMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="pickPageId" value="20026"/>
+		<param name="pickResourceBundle" value="platform"/>
+	</page>
+	<page component="CompensationPlan" href="/compensation/pickCompensationPlan.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CompensationFinder"/>
+		<param name="finderName" value="kPlanNamePickerViewContext"/>
+		<param name="autoCompleteHandler" value="com.saba.client.compensation.CompensationPlanAutoCompleteHandler"/>
+		<param name="boxWidth" value="300"/>
+		<widthType value="wider"/>
+	</page>
+	<page component="CompensationPlanAdmin" href="/compensation/pickCompensationPlan.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CompensationFinder"/>
+		<param name="finderName" value="kPlanNamePickerViewContext"/>
+		<param name="approverContext" value="adminapprover"/>
+		<param name="autoCompleteHandler" value="com.saba.client.compensation.CompensationPlanAutoCompleteHandler"/>
+		<param name="boxWidth" value="300"/>
+		<widthType value="wider"/>
+	</page>
+	<page component="CompensationDistribution" href="/compensation/pickCompensationDistribution.rdf" id="" type="picker"/>
+	<page component="CompensationAllocation" href="/compensation/pickCompensationAllocation.rdf" id="" type="picker"/>
+	<page component="EmployeeCompensation" href="/compensation/pickEmployeeCompensation.rdf" id="" type="picker"/>
+	<page component="PayStructure" href="/compensation/paystructure/pickPayStructure.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CompensationFinder"/>
+		<param name="finderName" value="kPayStructureMetaFinder"/>
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.PayStructureAutoCompleteHandler"/>
+	</page>
+	<page component="PayGrade" href="/compensation/paystructure/pickPayGrade.rdf" id="" type="picker"/>
+	<page component="GuidelineInfo" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CompensationFinder"/>
+		<param name="finderName" value="kGuidelineInfoMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="pickPageId" value="95056"/>
+		<param name="pickResourceBundle" value="compensation"/>
+		<param name="conditionName" value="name"/>
+	</page>
+	<page component="GuidelineLevel" href="/compensation/guideline/pickGuidelineLevel.rdf" id="" type="picker"/>
+	<page component="CompensationInfo" href="/compensation/paystructure/pickCompensationInfo.rdf" id="" type="picker"/>
+	<page component="CompInfoPayStructure" href="/compensation/paystructure/pickPayStructure.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.CompensationFinder"/>
+		<param name="finderName" value="kPayStructureMetaFinder"/>
+		<param name="autoCompleteHandler" value="com.saba.client.paystructure.PayStructureAutoCompleteHandler"/>
+	</page>
+	<page component="CompPlanBatch" href="/compensation/currency/pickBatch.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PlatformFinder"/>
+		<param name="finderName" value="kCurrencyBatchesMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="batch_name"/>
+		<param name="autoCompleteHandler" value="com.saba.client.services.BatchAutoCompleteHandler"/>
+		<widthType value="wider"/>
+        <param name="boxWidth" value="300"/>
+		<height value="500"/>
+	</page>
+	<page component="Goal Status" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kGoalStatusMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="status"/>
+		<param name="pickResourceBundle" value="performance"/>
+		<param name="pickPageId" value="60544"/>
+	</page>
+	<page component="Goal Type" href="/common/picker/genericPicker.rdf" id="" type="picker">
+		<param name="finderClass" value="com.saba.finder.PerformanceFinder"/>
+		<param name="finderName" value="kGoalTypeMetaFinder"/>
+		<param name="pickId" value="0"/>
+		<param name="pickDisplay" value="name"/>
+		<param name="contextName" value="autocomplete"/>
+		<param name="pickResourceBundle" value="performance"/>
+		<param name="pickPageId" value="60545"/>
+		<param name="conditionName" value="name"/>
+	</page>
+	<!-- Added for Humanage Unipol ISVAP customization  -->
+	<page component="ISVAP Template" href="/custom/ISVAP/isvapTemplates.rdf" id="" type="picker">
+		<param name="component" value="ISVAP Template"/>
+		<!-- <param name="autoCompleteHandler" value="com.saba.client.autocomplete.LocationAutoCompleteHandler"/> -->
+		<param name="finderClass" value="com.saba.isvap.finder.IsvapFinder"/>
+		<param name="finderName" value="kISVAPTemplateMetaFinder"/>
+	</page>
+	
+		<!-- Added for Humanage Unipol ISVAP customization  -->
+	<page component="ISVAP TemplatePick" href="/custom/ISVAP/isvapTemplatesPicker.rdf" id="" type="picker">
+		<param name="component" value="ISVAP Template"/>
+		<param name="autoCompleteHandler" value="com.saba.custom.client.autocomplete.ISVAPAutoCompleteHandler"/>
+		<param name="finderClass" value="com.saba.isvap.finder.IsvapFinder"/>
+		<param name="finderName" value="kISVAPTemplateMetaFinder"/>
+	</page>
+	
+			<!-- Added for Humanage Unipol ISVAP customization  -->
+	<page component="ISVAP TemplatePickILT" href="/custom/ISVAP/isvapTemplatesILTPicker.rdf" id="" type="picker">
+		<param name="component" value="ISVAP Template"/>
+		<param name="autoCompleteHandler" value="com.saba.custom.client.autocomplete.ISVAPAutoCompleteHandlerILT"/>
+		<param name="finderClass" value="com.saba.isvap.finder.IsvapFinder"/>
+		<param name="finderName" value="kISVAPTemplateILTFinder"/>
+	</page>
+	
+			<!-- Added for Humanage Unipol ISVAP customization  -->
+	<page component="ISVAP TemplatePickWBT" href="/custom/ISVAP/isvapTemplatesWBTPicker.rdf" id="" type="picker">
+		<param name="component" value="ISVAP Template"/>
+		<param name="autoCompleteHandler" value="com.saba.custom.client.autocomplete.ISVAPAutoCompleteHandlerWBT"/>
+		<param name="finderClass" value="com.saba.isvap.finder.IsvapFinder"/>
+		<param name="finderName" value="kISVAPTemplateWBTFinder"/>
+	</page>
+	
+	
+	<page component="Location" href="/learning/resource/location/pickLocation.rdf" id="40070" type="picker">
+		<param name="component" value="Location"/>
+		<param name="autoCompleteHandler" value="com.saba.client.autocomplete.LocationAutoCompleteHandler"/>
+		<param name="finderClass" value="com.saba.finder.LearningFinder"/>
+		<param name="finderName" value="kLocationMetaFinder"/>
+	</page>
+</pages>

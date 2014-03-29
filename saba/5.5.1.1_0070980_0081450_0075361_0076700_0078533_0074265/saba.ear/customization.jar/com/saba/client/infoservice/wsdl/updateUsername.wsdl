@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://www.saba.com/xml/infoservices"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:saba="http://www.saba.com/xml/infoservices"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/ http://schemas.xmlsoap.org/wsdl/"><!--Abstract binding created by GenerateWSDL on Fri Sep 09 13:49:18 IST 2011--><!--Developer - check this schema for accuracy and DELETE THIS COMMENT--><types><xsd:schema
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"><xsd:import
+                namespace="http://www.saba.com/xml/infoservices"
+                schemaLocation="info.xsd"/><xsd:complexType
+                        name="updateUsernameRequestType"><xsd:sequence><xsd:element
+                        name="codiceFiscale"
+                        type="xsd:string"/><xsd:element
+                        name="new_username"
+                        type="xsd:string"/><xsd:element
+                        name="isI18nDetail"
+                type="xsd:boolean"/></xsd:sequence></xsd:complexType><xsd:complexType
+                        name="updateUsernameResponseType"><xsd:sequence><xsd:element
+                                    name="codiceFiscale"><xsd:complexType><xsd:sequence><xsd:element
+                                    name="id"
+                                    type="xsd:string"/><xsd:element
+                                    name="username"
+                                    type="xsd:string"/><xsd:element
+                                    name="status"
+                                    type="xsd:string"/><xsd:element
+                                    name="message"
+        type="xsd:string"/></xsd:sequence></xsd:complexType></xsd:element></xsd:sequence></xsd:complexType></xsd:schema></types><message
+            name="updateUsernameRequest"><part name="certificate"
+            type="saba:certificateType"/><part name="query"
+        type="updateUsernameRequestType"/></message><message
+            name="updateUsernameReponse"><part name="updateUsername"
+        type="updateUsernameResponseType"/></message><portType
+            name="updateUsernamePortType"><operation
+                name="updateUsername"><input
+                message="saba:updateUsernameRequest"/><output message="saba:updateUsernameReponse"/></operation></portType></definitions>
