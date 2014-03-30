@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="offeringId" type="String" required="true"/>
+				<wdktags:param name="courseId" type="String" required="true"/>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+				<wdktags:param name="attachmentId" type="String" required="true"/>
+				<wdktags:param name="doArchive" type="String" required="true"/>
+			</wdktags:in>
+			<wdktags:out>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				OfferingEntityCommand offeringCommand = new OfferingEntityCommand();
+				CourseEntityCommand courseCommand = new CourseEntityCommand();
+				RegistrationSearchCommand registrationCommand = new RegistrationSearchCommand();
+				String attachmentUrl = "";
+				
+				boolean attachmentExists = false;
+				if (actionKey.equals(""))
+				{
+					actionKey = "step1";
+					
+					// Check whether an attachment already exists: if so, skip to step 3
+					AttachmentCommand attachmentCommand = AttachmentCommand.findByName(offeringId, "Lista presenze");
+					if (attachmentCommand != null)
+					{
+						attachmentId = attachmentCommand.getAttachmentId();
+						attachmentExists = true;
+						actionKey = "step3";
+					}
+				}
+				
+				int totalRegistered = 0;
+				int totalPresent = 0;
+				int totalAbsent = 0;
+				
+				if (actionKey.equals("step1"))
+				{
+					// There is a temporary attachment from step 2 and the user clicked "Annulla" to cancel the attachment
+					// Delete the temporary object from the database
+					if (attachmentId != null &amp;&amp; attachmentId.length() &gt; 0)
+					{
+						AttachmentCommand.delete(attachmentId);
+					}
+					
+					// Check whether an attachment already exists: if so, skip to step 3
+					AttachmentCommand attachmentCommand = AttachmentCommand.findByName(offeringId, "Lista presenze");
+					if (attachmentCommand != null)
+					{
+						attachmentId = attachmentCommand.getAttachmentId();
+						attachmentExists = true;
+						actionKey = "step3";
+					}
+				}
+				
+				if (actionKey.equals("step2"))
+				{
+					attachmentId = AttachmentCommand.createTemporary(
+						request,
+						offeringId, 
+						"Lista presenze",		// name
+						"Lista presenze"		// category
+					);
+					attachmentUrl = AttachmentCommand.buildSabaUrl(request, attachmentId, "inline");
+				}
+				
+				if (actionKey.equals("step3"))
+				{
+					// There is a temporary attachment from step 2 and the user clicked "Conferma" to save the attachment
+					if (!attachmentExists &amp;&amp; attachmentId != null &amp;&amp; attachmentId.length() &gt; 0)
+					{
+						AttachmentCommand.save(offeringId, attachmentId);
+						attachmentExists = true;
+					}
+					
+					// When coming back from step 4, retrieve the existing attachment
+					AttachmentCommand attachmentCommand = AttachmentCommand.findByName(offeringId, "Lista presenze");
+					if (attachmentCommand != null)
+					{
+						attachmentId = attachmentCommand.getAttachmentId();
+						attachmentExists = true;
+					}
+				}
+				
+				if (actionKey.equals("step4"))
+				{
+					java.util.Enumeration params = request.getParameterNames();
+					while (params.hasMoreElements())
+					{
+						String name = (String)params.nextElement();
+						if (name.startsWith("presence_reg"))
+						{
+							if (request.getParameter(name).equals("Y")) totalPresent++;
+							else totalAbsent++;
+							totalRegistered++;
+						}
+					}
+				}
+				
+				if (actionKey.equals("step5"))
+				{
+					// true if coming from step 4, otherwise coming from offeringSearch for archived offerings
+					if (doArchive.equals("true"))
+					{
+						// presence_regdw000000000000001
+						java.util.Hashtable&lt;String, String&gt; presence = new java.util.Hashtable&lt;String, String&gt;();
+						java.util.Enumeration params = request.getParameterNames();
+						while (params.hasMoreElements())
+						{
+							String name = (String)params.nextElement();
+							if (name.startsWith("presence_reg"))
+							{
+								presence.put(name.substring("presence_".length()), request.getParameter(name));
+							}
+						}
+						
+						RegistrationCommand regCommand = new RegistrationCommand();
+						regCommand.markPresence(presence);
+						offeringCommand.archive(offeringId);
+					}
+					
+					//check whether an attachment already exists
+					AttachmentCommand attachmentCommand = AttachmentCommand.findByName(offeringId, "Lista presenze");
+					if (attachmentCommand != null)
+					{
+						attachmentId = attachmentCommand.getAttachmentId();
+						attachmentExists = true;
+					}
+				}
+				</xsp:logic>
+				<Step><xsp:expr>actionKey</xsp:expr></Step>
+				<AttachmentUrl><xsp:expr>attachmentUrl</xsp:expr></AttachmentUrl>
+				
+				<wdktags:execute commandObj="offeringCommand">
+					<param name="id" expr="offeringId" mode="in" type="String"/>
+				</wdktags:execute>
+				
+				<wdktags:execute commandObj="courseCommand">
+					<param name="id" expr="courseId" mode="in" type="String"/>
+				</wdktags:execute>
+				
+				<xsp:logic>
+				if (actionKey.equals("step3") || actionKey.equals("step4") || actionKey.equals("step5"))
+				{
+				</xsp:logic>
+				<wdktags:execute commandObj="registrationCommand">
+					<param name="actionKey" expr="RegistrationSearchCommand.kSearchRegistrations" mode="in" type="String"/>
+					<param name="offeringId" expr="offeringId" mode="in" type="String"/>
+					<param name="courseId" expr="courseId" mode="in" type="String"/>
+				</wdktags:execute>
+				<xsp:logic>
+				}
+				</xsp:logic>
+				
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					Scheda Edizione
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label>
+				</label>
+			</wdk:pageText>
+			
+			<wdk:input name="wdkTitle">
+				<label>Titolo</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Title"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkOfferingNumber">
+				<label>ID Edizione</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="OfferingNumber"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkInstructor">
+				<label>Docente</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Instructor"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkStartDate">
+				<label>Data aula</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="StartDate"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkLocation">
+				<label>Sede</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Location"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkStartTime">
+				<label>Ora inizio</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="StartTime"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkEndTime">
+				<label>Ora fine</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="EndTime"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkExpiryDate">
+				<label>Data di scadenza</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="ExpiryDate"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkIvass">
+				<label>Validità IVASS</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="IsValidIvass"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkIvassDisciplines">
+				<label>Disciplina IVASS</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="IvassDisciplines"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkDuration">
+				<label>Durata</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Duration"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<xsp:logic>
+			String detailsLabel = "Gestione Iscrizioni";
+			String rosterLabel = "Gestione Presenze";
+			if (actionKey.equals("step5"))
+			{
+				detailsLabel = "";	// hide tab
+				rosterLabel = "Presenze";
+			}
+			</xsp:logic>
+			<wdk:multisection name="wdkSections">
+				<selected>offeringRoster</selected>
+				<action>
+					<id>offeringDetails</id>
+					<label><xsp:expr>detailsLabel</xsp:expr></label>
+					<href>/custom/ribaltamento/offeringDetails.xml</href>
+					<field>
+						<name>offeringId</name>
+						<value><xsp:expr>offeringId</xsp:expr></value>
+					</field>
+					<field>
+						<name>courseId</name>
+						<value><xsp:expr>courseId</xsp:expr></value>
+					</field>
+				</action>
+				<action>
+					<id>offeringRoster</id>
+					<label><xsp:expr>rosterLabel</xsp:expr></label>
+				</action>
+			</wdk:multisection>
+			
+			<xsp:logic>
+			if (actionKey.equals("step1"))
+			{
+			</xsp:logic>
+			<wdk:file name="wdkUpload">
+				<id>uploadfile</id>
+				<label>2a. Allega lista presenze firmata:</label>
+				<required>true</required>
+			</wdk:file>
+			
+			<wdk:link name="wdkNext">
+				<label>Avanti</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringRoster.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>step2</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			
+			<wdk:validatorWidget>
+				<saveLink>wdkNext</saveLink>
+			</wdk:validatorWidget>
+			<xsp:logic>
+			}
+			</xsp:logic>
+			
+			<xsp:logic>
+			if (actionKey.equals("step2"))
+			{
+			</xsp:logic>
+			<wdk:genericText name="wdkInstructions">
+				<label>Testo da definire</label>
+				<viewOnly>true</viewOnly>
+			</wdk:genericText>
+			
+			<wdk:link name="wdkNext">
+				<label>Conferma</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringRoster.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>step3</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+				<field>
+					<name>attachmentId</name>
+					<value><xsp:expr>attachmentId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			
+			<wdk:link name="wdkBack">
+				<label>Annulla</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringRoster.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>step1</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+				<field>
+					<name>attachmentId</name>
+					<value><xsp:expr>attachmentId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			<xsp:logic>
+			}
+			</xsp:logic>
+			
+			<xsp:logic>
+			if (actionKey.equals("step3"))
+			{
+				if (attachmentExists)
+				{
+					AttachmentCommand attachmentCommand = new AttachmentCommand(attachmentId);
+					String mimeType = attachmentCommand.getAttachType();
+					String attachmentName = attachmentCommand.getFileName();
+					String notdcId = attachmentCommand.getDocumentId();
+					String downloadUrl = com.saba.attachment.AttachmentUtil.getDownloadURL(request, notdcId, mimeType);
+			</xsp:logic>
+				<wdk:file name="wdkUpload">
+					<id>uploadfile</id>
+					<label>2a. Allega lista presenze firmata:</label>
+					<required>false</required>
+				</wdk:file>
+				
+				<wdk:link name="wdkOpenFile">
+					<type>link</type>
+					<label><xsp:expr>attachmentName</xsp:expr></label>
+					<action>
+						<type>process</type>
+						<function>
+							<name>downloadAttachment</name>
+							<arg>'<xsp:expr>downloadUrl</xsp:expr>'</arg>
+						</function>
+					</action>
+				</wdk:link>
+				
+				<wdk:link name="wdkUpdate">
+					<label>Aggiorna</label>
+					<type>button</type>
+					<action>
+						<type>process</type>
+						<function>
+							<name>checkFileUpload</name>
+						</function>
+					</action>
+					<action>
+						<type>process</type>
+						<function>
+							<name>setMultiPart</name>
+						</function>
+					</action>
+					<action>
+						<type>submit</type>
+						<href>/custom/ribaltamento/offeringRoster.xml</href>
+					</action>
+					<field>
+						<name>actionKey</name>
+						<value>step2</value>
+					</field>
+					<field>
+						<name>courseId</name>
+						<value><xsp:expr>courseId</xsp:expr></value>
+					</field>
+					<field>
+						<name>offeringId</name>
+						<value><xsp:expr>offeringId</xsp:expr></value>
+					</field>
+				</wdk:link>
+				<xsp:logic>
+				}
+				</xsp:logic>
+			
+			<wdk:table name="wdkResult">
+				<title>2b. Inserisci presenze online:</title>
+				<showEmptyTableText>false</showEmptyTableText>
+				<export>false</export>
+				<print>false</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>true</disablePaging>
+				<width>570</width>
+				<head>
+					<column>Cognome</column>
+					<column>Nome</column>
+					<column>Codice fiscale</column>
+					<column>Codice formativo</column>
+					<column>Presente</column>
+					<column>Assente</column>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Registration">
+					<column><wdktags:nodeRef path="LastName"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="FirstName"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="FiscalCode"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="TrainingCode"></wdktags:nodeRef></column>
+					<column>
+						<wdk:list>
+							<id>presence_<wdktags:nodeRef path="RegistrationId"/></id>
+							<type>radio</type>
+							<option>
+								<value>Y</value>
+								<text></text>
+							</option>
+							<event>
+								<type>action</type>
+								<action>
+									<type>process</type>
+									<function>
+										<name>selectPresence</name>
+										<arg>'<wdktags:nodeRef path="RegistrationId"/>'</arg>
+									</function>
+								</action>
+							</event>
+						</wdk:list>
+					</column>
+					<column>
+						<wdk:list>
+							<id>presence_<wdktags:nodeRef path="RegistrationId"/></id>
+							<type>radio</type>
+							<option>
+								<value>N</value>
+								<text></text>
+							</option>
+							<event>
+								<type>action</type>
+								<action>
+									<type>process</type>
+									<function>
+										<name>selectPresence</name>
+										<arg>'<wdktags:nodeRef path="StudentId"/>'</arg>
+									</function>
+								</action>
+							</event>
+						</wdk:list>
+					</column>
+				</row>
+			</wdk:table>
+			
+			<wdk:link name="wdkProcess">
+				<label>Processa</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringRoster.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>step4</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			<xsp:logic>
+			}
+			</xsp:logic>
+		
+			<xsp:logic>
+			if (actionKey.equals("step4"))
+			{
+			</xsp:logic>
+			<wdk:input name="wdkSummary">
+				<label>Riepilogo</label>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkTotalRegistered">
+				<label>Totale iscritti:</label>
+				<value><xsp:expr>totalRegistered</xsp:expr></value>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkTotalPresent">
+				<label>Totale presenti:</label>
+				<value><xsp:expr>totalPresent</xsp:expr></value>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkTotalAbsent">
+				<label>Totale assenti:</label>
+				<value><xsp:expr>totalAbsent</xsp:expr></value>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:table name="wdkResult">
+				<title>Elenco presenze:</title>
+				<showEmptyTableText>false</showEmptyTableText>
+				<export>false</export>
+				<print>false</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>true</disablePaging>
+				<width>570</width>
+				<head>
+					<column>Cognome</column>
+					<column>Nome</column>
+					<column>Codice fiscale</column>
+					<column>Codice formativo</column>
+					<column>Presente</column>
+					<column>Assente</column>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Registration">
+					<column><wdktags:nodeRef path="LastName"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="FirstName"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="FiscalCode"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="TrainingCode"></wdktags:nodeRef></column>
+					<xsp:logic>
+					String registrationId = WDKDomUtils.getNodeTextValue(wdkwidgetNode, "RegistrationId", wdkWidgetMaster.getXPathCache());
+					String presence = request.getParameter("presence_" + registrationId);
+					</xsp:logic>
+					<column>
+						<wdk:list>
+							<id>presence_<wdktags:nodeRef path="RegistrationId"/></id>
+							<type>radio</type>
+							<option>
+								<value>Y</value>
+								<text></text>
+							</option>
+							<selection><value><xsp:expr>presence</xsp:expr></value></selection>
+							<viewOnly>true</viewOnly>
+						</wdk:list>
+					</column>
+					<column>
+						<wdk:list>
+							<id>presence_<wdktags:nodeRef path="RegistrationId"/></id>
+							<type>radio</type>
+							<option>
+								<value>N</value>
+								<text></text>
+							</option>
+							<selection><value><xsp:expr>presence</xsp:expr></value></selection>
+							<viewOnly>true</viewOnly>
+						</wdk:list>
+					</column>
+				</row>
+			</wdk:table>
+			
+			<wdk:link name="wdkBack">
+				<label>Indietro</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringRoster.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>step3</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			
+			<wdk:link name="wdkConfirm">
+				<label>Conferma</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringRoster.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>step5</value>
+				</field>
+				<field>
+					<name>doArchive</name>
+					<value>true</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			<xsp:logic>
+			}
+			</xsp:logic>
+			
+			<xsp:logic>
+			if (actionKey.equals("step5"))
+			{
+				if (attachmentExists)
+				{
+					AttachmentCommand attachmentCommand = new AttachmentCommand(attachmentId);
+					String mimeType = attachmentCommand.getAttachType();
+					String attachmentName = attachmentCommand.getFileName();
+					String notdcId = attachmentCommand.getDocumentId();
+					String downloadUrl = com.saba.attachment.AttachmentUtil.getDownloadURL(request, notdcId, mimeType);
+			</xsp:logic>
+				<wdk:input name="wdkLabel">
+					<label>Lista presenze firmata:</label>
+					<viewOnly>true</viewOnly>
+				</wdk:input>
+				
+				<wdk:link name="wdkOpenFile">
+					<type>link</type>
+					<label><xsp:expr>attachmentName</xsp:expr></label>
+					<action>
+						<type>process</type>
+						<function>
+							<name>downloadAttachment</name>
+							<arg>'<xsp:expr>downloadUrl</xsp:expr>'</arg>
+						</function>
+					</action>
+				</wdk:link>
+				<xsp:logic>
+				}
+				</xsp:logic>
+			
+			<wdk:table name="wdkResult">
+				<title>Elenco presenze:</title>
+				<showEmptyTableText>false</showEmptyTableText>
+				<export>false</export>
+				<print>false</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>true</disablePaging>
+				<width>570</width>
+				<head>
+					<column>Cognome</column>
+					<column>Nome</column>
+					<column>Codice fiscale</column>
+					<column>Codice formativo</column>
+					<column>Presente</column>
+					<column>Assente</column>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Registration">
+					<column><wdktags:nodeRef path="LastName"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="FirstName"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="FiscalCode"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="TrainingCode"></wdktags:nodeRef></column>
+					<xsp:logic>
+					String presence = WDKDomUtils.getNodeTextValue(wdkwidgetNode, "Presence", wdkWidgetMaster.getXPathCache());
+					</xsp:logic>
+					<column>
+						<wdk:list>
+							<id>presence_<wdktags:nodeRef path="RegistrationId"/></id>
+							<type>radio</type>
+							<option>
+								<value>Y</value>
+								<text></text>
+							</option>
+							<xsp:logic>
+							if (presence != null)
+							{
+							</xsp:logic>
+							<selection><value><xsp:expr>(presence.equals("Presente") ? "Y" : "N")</xsp:expr></value></selection>
+							<xsp:logic>
+							}
+							</xsp:logic>
+							<viewOnly>true</viewOnly>
+						</wdk:list>
+					</column>
+					<column>
+						<wdk:list>
+							<id>presence_<wdktags:nodeRef path="RegistrationId"/></id>
+							<type>radio</type>
+							<option>
+								<value>N</value>
+								<text></text>
+							</option>
+							<xsp:logic>
+							if (presence != null)
+							{
+							</xsp:logic>
+							<selection><value><xsp:expr>(presence.equals("Presente") ? "Y" : "N")</xsp:expr></value></selection>
+							<xsp:logic>
+							}
+							</xsp:logic>
+							<viewOnly>true</viewOnly>
+						</wdk:list>
+					</column>
+				</row>
+			</wdk:table>
+
+			<xsp:logic>
+			}
+			</xsp:logic>
+
+			<wdk:link name="wdkEdit">
+				<label>Modifica edizione</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringEdit.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>edit</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+
+			<wdk:link name="wdkCancel">
+				<label>Cancella edizione</label>
+				<type>button</type>
+				<action>
+					<type>process</type>
+					<function>
+						<name>confirmCancel</name>
+					</function>
+				</action>
+				<href>/custom/ribaltamento/offeringEdit.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>cancel</value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			
+			<wdk:link name="wdkClose">
+				<label>Chiudi</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringSearch.xml</href>
+			</wdk:link>
+			
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

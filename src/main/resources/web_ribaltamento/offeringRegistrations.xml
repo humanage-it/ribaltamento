@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="offeringId" type="String" required="true"/>
+				<wdktags:param name="courseId" type="String" required="true"/>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+				<wdktags:param name="regFlag" type="String[]" required="false"/>
+			</wdktags:in>
+			<wdktags:out>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				OfferingEntityCommand offeringCommand = new OfferingEntityCommand();
+				RegistrationSearchCommand registrationCommand = new RegistrationSearchCommand();
+				</xsp:logic>
+				
+				<wdktags:execute commandObj="offeringCommand">
+					<param name="id" expr="offeringId" mode="in" type="String"/>
+				</wdktags:execute>
+				
+				<wdktags:execute commandObj="registrationCommand">
+					<param name="actionKey" expr="RegistrationSearchCommand.kSearchStudents" mode="in" type="String"/>
+					<param name="offeringId" expr="offeringId" mode="in" type="String"/>
+					<param name="courseId" expr="courseId" mode="in" type="String"/>
+				</wdktags:execute>
+				
+				<xsp:logic>
+				String offeringTitle = <wdktags:textValue modelSource="true" path="Offering/Title"/>;
+				</xsp:logic>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					<xsp:expr>offeringTitle</xsp:expr>
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label>
+				</label>
+			</wdk:pageText>
+			
+			<wdk:input name="wdkStartDate">
+				<label>Data aula</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="StartDate"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkLocation">
+				<label>Sede</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Location"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<xsp:logic>
+			String operationLabel = actionKey.equals("save") ? "Esito operazione" : "Iscrizione";
+			</xsp:logic>
+			<wdk:table name="wdkResult">
+				<showEmptyTableText>true</showEmptyTableText>
+				<emptyTableText>Nessun utente registrato.</emptyTableText>
+				<export>false</export>
+				<print>false</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>true</disablePaging>
+				<width>570</width>
+				<title>Gestione iscrizioni</title>
+				<head>
+					<column>Cognome</column>
+					<column>Nome</column>
+					<column>Codice fiscale</column>
+					<column>Codice formativo</column>
+					<column><xsp:expr>operationLabel</xsp:expr></column>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Registration">
+					<column><wdktags:nodeRef path="LastName"/></column>
+					<column><wdktags:nodeRef path="FirstName"/></column>
+					<column><wdktags:nodeRef path="FiscalCode"/></column>
+					<column><wdktags:nodeRef path="TrainingCode"/></column>
+					<column type="checkbox">
+						<xsp:logic>
+						if (actionKey.equals("search"))
+						{
+						</xsp:logic>
+						<wdk:list name="regFlag">
+							<id>regFlag</id>
+							<type>checkbox</type>
+							<option>
+								<value><wdktags:nodeRef path="StudentId"/></value>
+								<text></text>
+							</option>
+							<xsp:logic>
+							String isConfirmed = WDKDomUtils.getNodeTextValue(wdkwidgetNode, "IsConfirmed", wdkWidgetMaster.getXPathCache());
+							if (isConfirmed.equals("true"))
+							{
+							</xsp:logic>
+							<selection><value><wdktags:nodeRef path="StudentId"/></value></selection>
+							<xsp:logic>
+							}
+							</xsp:logic>
+						</wdk:list>
+						<xsp:logic>
+						}
+						else if (actionKey.equals("save"))
+						{
+							String studentId = WDKDomUtils.getNodeTextValue(wdkwidgetNode, "StudentId", wdkWidgetMaster.getXPathCache());
+							String isConfirmed = WDKDomUtils.getNodeTextValue(wdkwidgetNode, "IsConfirmed", wdkWidgetMaster.getXPathCache());
+							boolean flagProcessed = false;
+							
+							for (String flag : regFlag)
+							{
+								// Student selected: confirm registration if not already registered
+								if (flag.equals(studentId))
+								{
+									if (!isConfirmed.equals("true"))
+									{
+										RegistrationCommand regCommand = new RegistrationCommand();
+										String regMessage = regCommand.confirmRegistration(studentId, offeringId);
+									</xsp:logic>
+										<xsp:expr>regMessage</xsp:expr>
+									<xsp:logic>
+									}
+									
+									flagProcessed = true;	// mark record as processed
+									break;
+								}
+							}
+							
+							// if record has not been processed but the user is registered, it means the checkbox has been unticked
+							// therefore registration should be cancelled
+							if (!flagProcessed &amp;&amp; isConfirmed.equals("true"))
+							{
+								String registrationId = WDKDomUtils.getNodeTextValue(wdkwidgetNode, "RegistrationId", wdkWidgetMaster.getXPathCache());
+								RegistrationCommand regCommand = new RegistrationCommand();
+								String regMessage = regCommand.cancelRegistration(registrationId, offeringId);
+								</xsp:logic>
+									<xsp:expr>regMessage</xsp:expr>
+								<xsp:logic>
+							}
+						}
+						</xsp:logic>
+					</column>
+				</row>
+			</wdk:table>
+			
+			<xsp:logic>
+			if (!actionKey.equals("save"))
+			{
+			</xsp:logic>
+			<wdk:link name="wdkCancel">
+				<label>Annulla</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringDetails.xml</href>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			<xsp:logic>
+			}
+			</xsp:logic>
+			
+			<xsp:logic>
+			String saveLabel = "";
+			String saveAction = "";
+			
+			if (actionKey.equals("search"))
+			{
+				saveLabel = "Conferma";
+				saveAction = "save";
+			}
+			else if (actionKey.equals("save"))
+			{
+				saveLabel = "Chiudi";
+				saveAction = "close";
+			}
+			</xsp:logic>
+			<wdk:link name="wdkSave">
+				<label><xsp:expr>saveLabel</xsp:expr></label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringRegistrations.xml</href>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+				<field>
+					<name>actionKey</name>
+					<value><xsp:expr>saveAction</xsp:expr></value>
+				</field>
+			</wdk:link>
+			
+			<xsp:logic>
+			if (actionKey.equals("close"))
+			{
+			</xsp:logic>
+				<wdktags:redirect>
+					<hrefExpr>"/custom/ribaltamento/offeringDetails.rdf"</hrefExpr>
+					<param name="offeringId" valueExpr="offeringId"/>
+					<param name="courseId" valueExpr="courseId"/>
+					<useFramework>true</useFramework>
+				</wdktags:redirect>
+			<xsp:logic>
+			}
+			</xsp:logic>
+			
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

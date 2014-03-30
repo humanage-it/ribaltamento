@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+				<wdktags:param name="uploadfileName" type="String" required="true"/>
+				<wdktags:param name="csvFilename" type="String" required="true"/>
+			</wdktags:in>
+			<wdktags:out>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				OfferingsChangeExpiryDate finderCommand = new OfferingsChangeExpiryDate();
+				String buttonLabel = "Carica file";
+				String buttonAction = "upload";
+				String processOutcome = "";
+				String tempFolder = "C:/SabaWeb/tmp";
+				
+				if (actionKey.equals("upload"))
+				{
+					buttonLabel = "Aggiorna date di scadenza";
+					buttonAction = "process";
+				}
+				
+				if (!actionKey.equals(""))
+				{
+				</xsp:logic>
+				
+				<wdktags:execute commandObj="finderCommand">
+					<param name="actionKey" expr="actionKey" mode="in" type="String"/>
+					<param name="tempFolder" expr="tempFolder" mode="in" type="String"/>
+					<param name="csvFilename" expr="csvFilename" mode="in" type="String"/>
+				</wdktags:execute>
+				
+				<xsp:logic>
+				}
+				
+				csvFilename = finderCommand.getCsvFilename();
+				
+				if (actionKey.equals("process"))
+				{
+					processOutcome = finderCommand.getProcessOutcome();
+				}
+				</xsp:logic>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					Aggiornamento massivo della data di scadenza.
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label><xsp:expr>processOutcome</xsp:expr></label>
+			</wdk:pageText>
+			
+			<wdk:hiddenField>
+				<name>uploadfileName</name>
+				<value><xsp:expr>uploadfileName</xsp:expr></value>
+			</wdk:hiddenField>
+			
+			<wdk:hiddenField>
+				<name>csvFilename</name>
+				<value><xsp:expr>csvFilename</xsp:expr></value>
+			</wdk:hiddenField>
+			
+			<xsp:logic>
+			if (actionKey.equals(""))
+			{
+			</xsp:logic>
+			<wdk:file name="wdkUpload">
+				<id>uploadfile</id>
+				<label>File CSV:</label>
+				<required>true</required>
+			</wdk:file>
+			
+			<wdk:validatorWidget>
+				<saveLink>wdkProcess</saveLink>
+			</wdk:validatorWidget>
+			<xsp:logic>
+			}
+			</xsp:logic>
+			
+			<xsp:logic>
+			if (!actionKey.equals("process"))
+			{
+			</xsp:logic>
+			<wdk:link name="wdkProcess">
+				<label><xsp:expr>buttonLabel</xsp:expr></label>
+				<type>button</type>
+				<xsp:logic>
+				if (actionKey.equals(""))
+				{
+				</xsp:logic>
+				<action>
+					<type>process</type>
+					<function>
+						<name>setMultiPart</name>
+					</function>
+				</action>
+				<xsp:logic>
+				}
+				</xsp:logic>
+				<action>
+					<type>submit</type>
+					<href>/custom/ribaltamento/offeringsChangeExpiryDate.xml</href>
+				</action>
+				<field>
+					<name>actionKey</name>
+					<value><xsp:expr>buttonAction</xsp:expr></value>
+				</field>
+			</wdk:link>
+			<xsp:logic>
+			}
+			</xsp:logic>
+			
+			<wdk:table name="wdkResult">
+				<showEmptyTableText>false</showEmptyTableText>
+				<export>false</export>
+				<print>false</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>false</disablePaging>
+				<pageSize>20</pageSize>
+				<width>570</width>
+				<head>
+					<column>Titolo</column>
+					<column>ID Edizione</column>
+					<column>Data inizio</column>
+					<column>Sede</column>
+					<column>Data scadenza</column>
+					<xsp:logic>
+					if (!actionKey.equals("process"))
+					{
+					</xsp:logic>
+					<column>Nuova data scadenza</column>
+					<xsp:logic>
+					}
+					</xsp:logic>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Offering">
+					<column><wdktags:nodeRef path="Title"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="OfferingNumber"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="StartDate"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="Location"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="ExpiryDate"></wdktags:nodeRef></column>
+					<xsp:logic>
+					if (!actionKey.equals("process"))
+					{
+					</xsp:logic>
+					<column><wdktags:nodeRef path="NewExpiryDate"></wdktags:nodeRef></column>
+					<xsp:logic>
+					}
+					</xsp:logic>
+				</row>
+			</wdk:table>
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

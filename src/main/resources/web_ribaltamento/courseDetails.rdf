@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?cocoon-process type="wdk"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:wdk="http://www.saba.com/XML/WDK">
+	<rdf:Description id="900001">
+		<rdf:type resource="http://www.saba.com/XML/WDK/Control"/>
+		<wdk:version>1.0</wdk:version>
+		<wdk:model rdf:resource="/custom/ribaltamento/courseDetails.xml"/>
+		<wdk:view rdf:resource="/custom/ribaltamento/courseDetails.xsl"/>
+		<wdk:widgets rdf:resource="/wdk/xsl/widget/wdk_widgets.xsl"/>
+		<wdk:uiframework/>
+		<wdk:links>
+			<wdk:link control="/custom/ribaltamento/courseSearch.rdf" model="/custom/ribaltamento/courseSearch.xml"/>
+			<wdk:link control="/custom/ribaltamento/downloadAttachment.rdf" model="/custom/ribaltamento/downloadAttachment.xml"/>
+			<wdk:link control="/custom/ribaltamento/offeringEdit.rdf" model="/custom/ribaltamento/offeringEdit.xml"/>
+		</wdk:links>
+	</rdf:Description>
+</rdf:RDF>

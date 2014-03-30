@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+			</wdktags:in>
+			<wdktags:out>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				OfferingsNoRegistrationsCommand finderCommand = new OfferingsNoRegistrationsCommand();
+				
+				if (actionKey.equals("process"))
+				{
+					finderCommand.moveToTrash();
+				}
+				</xsp:logic>
+				
+				<wdktags:execute commandObj="finderCommand">
+				</wdktags:execute>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					Edizioni ribaltabili senza iscritti dopo un mese dalla data di inizio.
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label>
+				</label>
+			</wdk:pageText>
+			
+			<wdk:link name="wdkProcess">
+				<label>Muovi in Trash</label>
+				<type>button</type>
+				<do>process</do>
+				<action>
+					<href>/custom/ribaltamento/offeringsNoRegistrations.xml</href>
+				</action>
+			</wdk:link>
+			
+			<wdk:table name="wdkResult">
+				<showEmptyTableText>true</showEmptyTableText>
+				<emptyTableText>Nessuna edizione trovata.</emptyTableText>
+				<export>true</export>
+				<print>true</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>false</disablePaging>
+				<pageSize>20</pageSize>
+				<width>570</width>
+				<head>
+					<column>Titolo</column>
+					<column>ID Edizione</column>
+					<column>Data inizio</column>
+					<column>Sede</column>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Offering">
+					<column><wdktags:nodeRef path="Title"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="OfferingNumber"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="StartDate"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="Location"></wdktags:nodeRef></column>
+				</row>
+			</wdk:table>
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

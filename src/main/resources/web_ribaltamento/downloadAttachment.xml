@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>java.io.*</xsp:include>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="attachmentId" type="String" required="true"/>
+				<wdktags:param name="disposition" type="String" required="true"/>
+			</wdktags:in>
+			<wdktags:out>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+			<xsp:logic>
+			AttachmentCommand command = new AttachmentCommand(attachmentId);
+			String fileName = command.getFileName() + command.getDocType();
+			String mimeType = command.getAttachType();
+			InputStream file = command.getStream();
+			
+			response.setContentType(mimeType);
+			
+			String contentDisposition = "attachment;filename=" + fileName;
+			if (disposition != null &amp;&amp; disposition.equals("inline"))
+			{
+				contentDisposition = "inline";
+			}
+			response.setHeader("Content-Disposition", contentDisposition);
+			
+			ServletOutputStream out = response.getOutputStream();
+			
+			byte[] outputByte = new byte[4096];
+			while (file.read(outputByte, 0, 4096) != -1)
+			{
+				out.write(outputByte, 0, 4096);
+			}
+			
+			file.close();
+			out.flush();
+			out.close();
+
+			/*
+			response.reset();
+			response.setBufferSize(DEFAULT_BUFFER_SIZE);
+			response.setContentLength((int)file.length());
+			response.setContentType("application/pdf");
+			response.setHeader("Content-Length", String.valueOf(file.length()));
+			response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+			*/
+			</xsp:logic>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

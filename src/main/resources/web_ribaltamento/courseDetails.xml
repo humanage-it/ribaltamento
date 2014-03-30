@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="courseId" type="String" required="true"/>
+			</wdktags:in>
+			<wdktags:out>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				CourseEntityCommand entityCommand = new CourseEntityCommand();
+				</xsp:logic>
+				<wdktags:execute commandObj="entityCommand">
+					<param name="id" expr="courseId" mode="in" type="String"/>
+				</wdktags:execute>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					Corso: <xsp:expr>entityCommand.CourseTitle</xsp:expr>
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label>
+				</label>
+			</wdk:pageText>
+			
+			<wdk:input name="wdkTitle">
+				<label>Titolo</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Title"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkCourseNumber">
+				<label>ID Corso</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="CourseNumber"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:textArea name="wdkAbstract">
+				<label>Abstract</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Abstract"></wdktags:nodeRef></value>
+				<width>40</width>
+				<height>3</height>
+				<readonly>true</readonly>
+			</wdk:textArea>
+
+			<wdk:textArea name="wdkDescription">
+				<label>Descrizione</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Description"></wdktags:nodeRef></value>
+				<width>40</width>
+				<height>3</height>
+				<readonly>true</readonly>
+			</wdk:textArea>
+			
+			<wdk:input name="wdkDuration">
+				<label>Durata</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Duration"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkPublicationYear">
+				<label>Anno di pubblicazione</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="PublicationYear"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkIvassDisciplines">
+				<label>Disciplina IVASS</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="IvassDisciplines"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkTrainingCodes">
+				<label>Codice Formativo</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="TrainingCodes"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:table name="wdkAttachments">
+				<title>Allegati</title>
+				<showEmptyTableText>true</showEmptyTableText>
+				<emptyTableText>Nessun allegato esistente.</emptyTableText>
+				<export>false</export>
+				<print>false</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>false</disablePaging>
+				<pageSize>20</pageSize>
+				<width>570</width>
+				<head>
+					<column>Nome</column>
+					<column>Descrizione</column>
+					<column>Destinatari</column>
+				</head>
+				<wdktags:attachTo path="Course/Attachments"/>
+				<row path="Attachment">
+					<column>
+						<wdk:link name="attachmentLink">
+							<label><wdktags:nodeRef path="Name"></wdktags:nodeRef></label>
+							<href>/custom/ribaltamento/downloadAttachment.xml</href>
+							<field>
+								<name>attachmentId</name>
+								<value><wdktags:nodeRef path="Id"></wdktags:nodeRef></value>
+							</field>
+						</wdk:link>
+					</column>
+					<column><wdktags:nodeRef path="Description"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="Target"></wdktags:nodeRef></column>
+				</row>
+			</wdk:table>
+
+			<wdk:link name="wdkNewOffering">
+				<label>Crea nuova edizione</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringEdit.xml</href>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+			</wdk:link>
+		
+			<wdk:link name="wdkBack">
+				<label>Indietro</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/courseSearch.xml</href>
+			</wdk:link>
+
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

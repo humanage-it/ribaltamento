@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+				<wdktags:param name="title" type="String" required="false"/>
+				<wdktags:param name="number" type="String" required="false"/>
+				<wdktags:param name="year" type="String" required="false"/>
+				<wdktags:param name="code" type="String" required="false"/>
+				<wdktags:param name="ivass" type="String" required="false"/>
+				<!-- hack to make Table paging work -->
+				<wdktags:param name="wdkResultactionKey" type="String" required="false"/>
+			</wdktags:in>
+			<wdktags:out>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				CourseFinderCommand finderCommand = new CourseFinderCommand();
+				
+				if (wdkResultactionKey.equals("jump"))
+				{
+					actionKey = "search";
+				}
+				</xsp:logic>
+				<wdktags:execute commandObj="finderCommand">
+				</wdktags:execute>
+				
+				<xsp:logic>
+				if (actionKey.equals("search"))
+				{
+					CourseSearchCommand searchCommand = new CourseSearchCommand();
+				</xsp:logic>
+					<wdktags:execute commandObj="searchCommand">
+						<param name="title" expr="title" mode="in" type="String"/>
+						<param name="number" expr="number" mode="in" type="String"/>
+						<param name="year" expr="year" mode="in" type="String"/>
+						<param name="code" expr="code" mode="in" type="String"/>
+						<param name="ivass" expr="ivass" mode="in" type="String"/>
+					</wdktags:execute>
+				<xsp:logic>
+				}
+				</xsp:logic>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					Ricerca dei corsi erogabili in agenzia
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label>
+				</label>
+			</wdk:pageText>
+			
+			<wdk:input name="wdkTitle">
+				<id>title</id>
+				<label>Titolo</label>
+				<value><xsp:expr>title</xsp:expr></value>
+				<sizeType>medium</sizeType>
+			</wdk:input>
+			
+			<wdk:input name="wdkNumber">
+				<id>number</id>
+				<label>ID Corso</label>
+				<value><xsp:expr>number</xsp:expr></value>
+				<sizeType>medium</sizeType>
+			</wdk:input>
+			
+			<wdk:list name="wdkYear">
+				<id>year</id>
+				<label>Anno di pubblicazione</label>
+				<type>select</type>
+				<wdktags:attachTo path="Finder/Years"/>
+				<wdktags:repeat name="items" path="Item">
+					<option>
+						<value><wdktags:nodeRef source="items" path="Value"/></value>
+						<text><wdktags:nodeRef source="items" path="Name"/></text>
+					</option>
+				</wdktags:repeat>
+				<selection>
+					<value><xsp:expr>year</xsp:expr></value>
+				</selection>
+				<showBlank>true</showBlank>
+			</wdk:list>
+			
+			<wdk:list name="wdkIvass">
+				<id>ivass</id>
+				<label>Disciplina IVASS</label>
+				<type>select</type>
+				<wdktags:attachTo path="Finder/IvassDisciplines"/>
+				<wdktags:repeat name="items" path="Item">
+					<option>
+						<value><wdktags:nodeRef source="items" path="Value"/></value>
+						<text><wdktags:nodeRef source="items" path="Name"/></text>
+					</option>
+				</wdktags:repeat>
+				<selection>
+					<value><xsp:expr>ivass</xsp:expr></value>
+				</selection>
+				<showBlank>true</showBlank>
+			</wdk:list>
+			
+			<wdk:list name="wdkCode">
+				<id>code</id>
+				<label>Codice formativo</label>
+				<type>select</type>
+				<wdktags:attachTo path="Finder/TrainingCodes"/>
+				<wdktags:repeat name="items" path="Item">
+					<option>
+						<value><wdktags:nodeRef source="items" path="Value"/></value>
+						<text><wdktags:nodeRef source="items" path="Name"/></text>
+					</option>
+				</wdktags:repeat>
+				<selection>
+					<value><xsp:expr>code</xsp:expr></value>
+				</selection>
+				<showBlank>true</showBlank>
+			</wdk:list>
+			
+			<wdk:link name="wdkSearch">
+				<id>search</id>
+				<label>Ricerca</label>
+				<type>button</type>
+				<do>search</do>
+				<action>
+					<href>/custom/ribaltamento/courseSearch.xml</href>
+				</action>
+			</wdk:link>
+			
+			<wdk:table name="wdkResult">
+				<showEmptyTableText>true</showEmptyTableText>
+				<emptyTableText>Nessun corso trovato.</emptyTableText>
+				<export>true</export>
+				<print>true</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>false</disablePaging>
+				<pageSize>20</pageSize>
+				<width>570</width>
+				<head>
+					<column>Titolo</column>
+					<column>ID Corso</column>
+					<column>Durata</column>
+					<column>Anno Pubblicazione</column>
+					<column>Disciplina IVASS</column>
+					<column>Codice Formativo</column>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Course">
+					<column>
+						<wdk:link name="courseDetailsLink">
+							<label><wdktags:nodeRef path="Title"></wdktags:nodeRef></label>
+							<href>/custom/ribaltamento/courseDetails.xml</href>
+							<field>
+								<name>courseId</name>
+								<value><wdktags:nodeRef path="Id"></wdktags:nodeRef></value>
+							</field>
+						</wdk:link>
+					</column>
+					<column><wdktags:nodeRef path="CourseNumber"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="Duration"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="PublicationYear"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="IvassDisciplines"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="TrainingCodes"></wdktags:nodeRef></column>
+				</row>
+			</wdk:table>
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

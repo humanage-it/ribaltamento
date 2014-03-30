@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+		<xsp:include>java.util.Calendar</xsp:include>
+		<xsp:include>java.text.DateFormat</xsp:include>
+		<xsp:include>java.text.SimpleDateFormat</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="offeringId" type="String" required="true"/>
+				<wdktags:param name="courseId" type="String" required="true"/>
+			</wdktags:in>
+			<wdktags:out>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				OfferingEntityCommand offeringCommand = new OfferingEntityCommand();
+				CourseEntityCommand courseCommand = new CourseEntityCommand();
+				RegistrationSearchCommand registrationCommand = new RegistrationSearchCommand();
+				</xsp:logic>
+				
+				<wdktags:execute commandObj="offeringCommand">
+					<param name="id" expr="offeringId" mode="in" type="String"/>
+				</wdktags:execute>
+				
+				<wdktags:execute commandObj="courseCommand">
+					<param name="id" expr="courseId" mode="in" type="String"/>
+				</wdktags:execute>
+				
+				<wdktags:execute commandObj="registrationCommand">
+					<param name="actionKey" expr="RegistrationSearchCommand.kSearchRegistrations" mode="in" type="String"/>
+					<param name="offeringId" expr="offeringId" mode="in" type="String"/>
+					<param name="courseId" expr="courseId" mode="in" type="String"/>
+				</wdktags:execute>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					Scheda Edizione
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label>
+				</label>
+			</wdk:pageText>
+			
+			<wdk:input name="wdkTitle">
+				<label>Titolo</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Title"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkOfferingNumber">
+				<label>ID Edizione</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="OfferingNumber"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkInstructor">
+				<label>Docente</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Instructor"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkStartDate">
+				<label>Data aula</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="StartDate"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkLocation">
+				<label>Sede</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Location"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkStartTime">
+				<label>Ora inizio</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="StartTime"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkEndTime">
+				<label>Ora fine</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="EndTime"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkExpiryDate">
+				<label>Data di scadenza</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="ExpiryDate"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkIvass">
+				<label>Validità IVASS</label>
+				<wdktags:attachTo path="Offering"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="IsValidIvass"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkIvassDisciplines">
+				<label>Disciplina IVASS</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="IvassDisciplines"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+
+			<wdk:input name="wdkDuration">
+				<label>Durata</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Duration"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:multisection name="wdkSections">
+				<selected>offeringDetails</selected>
+				<action>
+					<id>offeringDetails</id>
+					<label>Gestione Iscrizioni</label>
+				</action>
+				<xsp:logic>
+				// Second tab visible only after offering start date
+				Calendar now = Calendar.getInstance();
+				now.set(Calendar.HOUR_OF_DAY, 0);
+				now.set(Calendar.MINUTE, 0);
+				now.set(Calendar.SECOND, 0);
+				
+				String startDateStr = <wdktags:textValue modelSource="true" path="Offering/StartDate"/>;
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				Calendar startDate = Calendar.getInstance();
+				startDate.setTime(df.parse(startDateStr));
+				
+				if (now.compareTo(startDate) &gt;= 0)
+				{
+				</xsp:logic>
+				<action>
+					<id>offeringRoster</id>
+					<label>Gestione Presenze</label>
+					<href>/custom/ribaltamento/offeringRoster.xml</href>
+					<field>
+						<name>offeringId</name>
+						<value><xsp:expr>offeringId</xsp:expr></value>
+					</field>
+					<field>
+						<name>courseId</name>
+						<value><xsp:expr>courseId</xsp:expr></value>
+					</field>
+				</action>
+				<xsp:logic>
+				}
+				// Empty tab to force rendering of the first tab when the second one is not to be displayed
+				// Saba does not display multisection with one tab only
+				else
+				{
+				</xsp:logic>
+				<action>
+					<id>offeringRoster</id>
+					<label></label>
+					<href>/custom/ribaltamento/offeringRoster.xml</href>
+				</action>
+				<xsp:logic>
+				}
+				</xsp:logic>
+			</wdk:multisection>
+			
+			<wdk:table name="wdkResult">
+				<showEmptyTableText>true</showEmptyTableText>
+				<emptyTableText>Nessun utente registrato.</emptyTableText>
+				<export>false</export>
+				<print>false</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>true</disablePaging>
+				<width>570</width>
+				<head>
+					<column>Cognome</column>
+					<column>Nome</column>
+					<column>Codice fiscale</column>
+					<column>Codice formativo</column>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Registration">
+					<column><wdktags:nodeRef path="LastName"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="FirstName"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="FiscalCode"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="TrainingCode"></wdktags:nodeRef></column>
+				</row>
+				<actionLinks>
+					<data>
+						<wdk:link name="wdkRegister">
+							<label>Aggiungi/rimuovi risorsa</label>
+							<type>link</type>
+							<href>/custom/ribaltamento/offeringRegistrations.xml</href>
+							<field>
+								<name>offeringId</name>
+								<value><xsp:expr>offeringId</xsp:expr></value>
+							</field>
+							<field>
+								<name>courseId</name>
+								<value><xsp:expr>courseId</xsp:expr></value>
+							</field>
+							<field>
+								<name>actionKey</name>
+								<value>search</value>
+							</field>
+						</wdk:link>
+					</data>
+				</actionLinks>
+			</wdk:table>
+			
+			<wdk:link name="wdkEdit">
+				<label>Modifica edizione</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringEdit.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>edit</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+		
+			<wdk:link name="wdkCancel">
+				<label>Cancella edizione</label>
+				<type>button</type>
+				<action>
+					<type>process</type>
+					<function>
+						<name>confirmCancel</name>
+					</function>
+				</action>
+				<href>/custom/ribaltamento/offeringEdit.xml</href>
+				<field>
+					<name>actionKey</name>
+					<value>cancel</value>
+				</field>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			
+			<wdk:link name="wdkClose">
+				<label>Chiudi</label>
+				<type>button</type>
+				<href>/custom/ribaltamento/offeringSearch.xml</href>
+			</wdk:link>
+			
+			<xsp:logic>
+			if (registrationCommand.RegistrationCount &gt; 0)
+			{
+				Report report = ReportCommand.findByName("UnipolSai Lista Presenze");
+			</xsp:logic>
+			<wdk:link name="wdkPrint">
+				<label>Stampa lista presenze</label>
+				<type>button</type>
+				<action>
+					<type>process</type>
+					<function>
+						<name>openReport</name>
+						<arg>'<xsp:expr>offeringId</xsp:expr>'</arg>
+						<arg>'<xsp:expr>report.DefinitionId</xsp:expr>'</arg>
+						<arg>'<xsp:expr>report.ModelId</xsp:expr>'</arg>
+					</function>
+				</action>
+				<field>
+					<name>offeringId</name>
+					<value><xsp:expr>offeringId</xsp:expr></value>
+				</field>
+			</wdk:link>
+			<xsp:logic>
+			}
+			</xsp:logic>
+
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

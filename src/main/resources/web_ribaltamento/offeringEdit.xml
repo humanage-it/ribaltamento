@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+		<xsp:include>com.saba.locator.*</xsp:include>
+		<xsp:include>com.saba.party.*</xsp:include>
+		<xsp:include>com.saba.party.person.*</xsp:include>
+		<xsp:include>java.text.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="courseId" type="String" required="true"/>
+				<wdktags:param name="offeringId" type="String" required="true"/>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+				<wdktags:param name="actionMode" type="String" required="true"/>
+				<wdktags:param name="location" type="String" required="false"/>
+				<wdktags:param name="startDate" type="String" required="false"/>
+				<wdktags:param name="startTimeHour" type="String" required="false"/>
+				<wdktags:param name="startTimeMin" type="String" required="false"/>
+				<wdktags:param name="endTime" type="String" required="false"/>
+			</wdktags:in>
+			<wdktags:out>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				ServiceLocator slocator = getServiceLocator();
+				String userId = slocator.getSabaPrincipal().getID();
+				
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				
+				boolean isEdit = actionKey.equals("edit") || actionMode.equals("edit");
+				if (isEdit)
+				{
+					OfferingEntityCommand offeringCommand = new OfferingEntityCommand();
+				</xsp:logic>
+					<wdktags:execute commandObj="offeringCommand">
+						<param name="id" expr="offeringId" mode="in" type="String"/>
+					</wdktags:execute>
+				<xsp:logic>
+				}
+				
+				if (actionKey.equals("cancel"))
+				{
+					OfferingEntityCommand offeringCommand = new OfferingEntityCommand();
+					offeringCommand.cancel(offeringId);
+					
+					String hrefRedirect = "/custom/ribaltamento/offeringSearch.rdf";
+				</xsp:logic>
+					<wdktags:redirect>
+						<hrefExpr>hrefRedirect</hrefExpr>
+						<useFramework>true</useFramework>
+					</wdktags:redirect>
+				<xsp:logic>
+				}
+				
+				boolean isSaveResult = false;
+				if (actionKey.equals("save"))
+				{
+					Offering offering = new Offering();
+					offering.Id = offeringId;
+					offering.CourseId = courseId;
+					offering.OwnerId = userId;
+					offering.StartDate = df.parse(startDate);
+					offering.LocationId = location;
+					offering.StartTime = startTimeHour + ":" + startTimeMin;
+					offering.EndTime = endTime;
+					
+					OfferingEntityCommand offeringCommand = new OfferingEntityCommand();
+					String saveResult = offeringCommand.save(offering);
+					
+					if (saveResult.equals("{NEW-CONFLICT}"))
+					{
+						saveResult = "Non è possibile creare questa edizione nella data e orario indicato perché l'agente è già assegnato come docente ad un'altra edizione nello stesso periodo.";
+						isSaveResult = true;
+					}
+					else if (saveResult.equals("{UPD-CONFLICT}"))
+					{
+						saveResult = "Non è possibile aggiornare questa edizione con la data e orario indicato perché l'agente è già assegnato come docente ad un'altra edizione nello stesso periodo.";
+						isSaveResult = true;
+					}
+					else
+					{
+						offeringId = saveResult;
+						
+						String hrefRedirect = "/custom/ribaltamento/offeringDetails.rdf";
+						// need to pass offeringId as queryString because param tag is built before execution of Java code
+						// and valueExpr does not see the new value of the offeringId variable returned by save()
+						String queryString = "offeringId=" + offeringId;
+				</xsp:logic>
+					<wdktags:redirect>
+						<hrefExpr>hrefRedirect</hrefExpr>
+						<useFramework>true</useFramework>
+						<queryStringExpr>queryString</queryStringExpr>
+						<param name="offeringId" valueExpr="offeringId"/>
+						<param name="courseId" valueExpr="courseId"/>
+					</wdktags:redirect>
+				<xsp:logic>
+					}
+					</xsp:logic>
+					<SaveResult><xsp:expr>saveResult</xsp:expr></SaveResult>
+					<xsp:logic>
+				}
+				
+				CourseEntityCommand entityCommand = new CourseEntityCommand();
+				LocationFinderCommand finderCommand = new LocationFinderCommand();
+				
+				Person currentPerson = (Person)ServiceLocator.getReference(userId);
+				PartyManager currentPersonManager = (PartyManager)slocator.getManager(Delegates.kPartyManager);
+				EmployeeDetail currentPersonDetail = (EmployeeDetail)currentPersonManager.getDetail(currentPerson);
+				
+				String userFullName = currentPersonDetail.getNameDetail().getFname() + " " + currentPersonDetail.getNameDetail().getLname();
+				String expiryDate = "31/12/" + Calendar.getInstance().get(Calendar.YEAR);
+				String currentDate = df.format(new java.util.Date());
+				
+				String offeringStartDate = isEdit ? <wdktags:textValue modelSource="true" path="Offering/StartDate"/> : currentDate;
+				String offeringStartTimeHH = isEdit ? <wdktags:textValue modelSource="true" path="Offering/StartTime"/>.substring(0, 2) : "09";
+				String offeringStartTimeMM = isEdit ? <wdktags:textValue modelSource="true" path="Offering/StartTime"/>.substring(3) : "00";
+				String offeringLocation = isEdit ? <wdktags:textValue modelSource="true" path="Offering/LocationId"/> : "";
+				
+				if (isSaveResult)
+				{
+					offeringStartDate = startDate;
+					offeringStartTimeHH = startTimeHour;
+					offeringStartTimeMM = startTimeMin;
+					offeringLocation = location;
+				}
+				</xsp:logic>
+				<wdktags:execute commandObj="entityCommand">
+					<param name="id" expr="courseId" mode="in" type="String"/>
+				</wdktags:execute>
+				
+				<wdktags:execute commandObj="finderCommand">
+				</wdktags:execute>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					<xsp:logic>
+					if (isEdit)
+					{
+					</xsp:logic>
+					Modifica Edizione: <xsp:expr><wdktags:textValue modelSource="true" path="Offering/OfferingNumber"/></xsp:expr>
+					<xsp:logic>
+					}
+					else
+					{
+					</xsp:logic>
+					Nuova Edizione
+					<xsp:logic>
+					}
+					</xsp:logic>
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label>
+				</label>
+			</wdk:pageText>
+			
+			<wdk:input name="wdkTitle">
+				<label>Titolo</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Title"/></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkInstructor">
+				<label>Docente</label>
+				<value><xsp:expr>userFullName</xsp:expr></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:hiddenField>
+				<name>instructorId</name>
+				<value><xsp:expr>userId</xsp:expr></value>
+			</wdk:hiddenField>
+			
+			<wdk:dateInput name="wdkStartDate">
+				<id>startDate</id>
+				<label>Data aula</label>
+				<enable>true</enable>
+				<required>true</required>
+				<callbackFn>validateStartDate</callbackFn>
+				<value><xsp:expr>offeringStartDate</xsp:expr></value>
+			</wdk:dateInput>
+			
+			<wdk:list name="wdkLocation">
+				<id>location</id>
+				<label>Sede</label>
+				<type>select</type>
+				<wdktags:attachTo path="Finder/Locations"/>
+				<wdktags:repeat name="items" path="Location">
+					<option>
+						<value><wdktags:nodeRef source="items" path="Id"/></value>
+						<text><wdktags:nodeRef source="items" path="Name"/></text>
+					</option>
+				</wdktags:repeat>
+				<showBlank>false</showBlank>
+				<required>true</required>
+				<selection>
+					<value><xsp:expr>offeringLocation</xsp:expr></value>
+				</selection>
+			</wdk:list>
+			
+			<wdk:input name="wdkDuration">
+				<id>duration</id>
+				<label>Durata</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="Duration"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:list name="wdkStartTimeHour">
+				<id>startTimeHour</id>
+				<type>select</type>
+				<label>Ora inizio</label>
+				<option><value>08</value><text>08</text></option>
+				<option><value>09</value><text>09</text></option>
+				<option><value>10</value><text>10</text></option>
+				<option><value>11</value><text>11</text></option>
+				<option><value>12</value><text>12</text></option>
+				<option><value>13</value><text>13</text></option>
+				<option><value>14</value><text>14</text></option>
+				<option><value>15</value><text>15</text></option>
+				<option><value>16</value><text>16</text></option>
+				<option><value>17</value><text>17</text></option>
+				<option><value>18</value><text>18</text></option>
+				<selection><value><xsp:expr>offeringStartTimeHH</xsp:expr></value></selection>
+				<event>
+					<type>action</type>
+					<action>
+						<type>process</type>
+						<function>
+							<name>updateEndTime</name>
+						</function>
+					</action>
+				</event>
+				<showBlank>false</showBlank>
+				<required>true</required>
+			</wdk:list>
+			
+			<wdk:list name="wdkStartTimeMin">
+				<id>startTimeMin</id>
+				<type>select</type>
+				<option><value>00</value><text>00</text></option>
+				<option><value>05</value><text>05</text></option>
+				<option><value>10</value><text>10</text></option>
+				<option><value>15</value><text>15</text></option>
+				<option><value>20</value><text>20</text></option>
+				<option><value>25</value><text>25</text></option>
+				<option><value>30</value><text>30</text></option>
+				<option><value>35</value><text>35</text></option>
+				<option><value>40</value><text>40</text></option>
+				<option><value>45</value><text>45</text></option>
+				<option><value>50</value><text>50</text></option>
+				<option><value>55</value><text>55</text></option>
+				<selection><value><xsp:expr>offeringStartTimeMM</xsp:expr></value></selection>
+				<event>
+					<type>action</type>
+					<action>
+						<type>process</type>
+						<function>
+							<name>updateEndTime</name>
+						</function>
+					</action>
+				</event>
+				<showBlank>false</showBlank>
+				<required>true</required>
+			</wdk:list>
+			
+			<wdk:input name="wdkEndTime">
+				<id>endTime</id>
+				<label>Ora fine</label>
+				<readonly>true</readonly>
+				<size>5</size>
+			</wdk:input>
+			
+			<wdk:input name="wdkExpiryDate">
+				<label>Data di scadenza</label>
+				<value><xsp:expr>expiryDate</xsp:expr></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkIvass">
+				<label>Validità IVASS</label>
+				<value>Sì</value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:input name="wdkIvassDisciplines">
+				<label>Disciplina IVASS</label>
+				<wdktags:attachTo path="Course"></wdktags:attachTo>
+				<value><wdktags:nodeRef path="IvassDisciplines"></wdktags:nodeRef></value>
+				<readonly>true</readonly>
+				<viewOnly>true</viewOnly>
+			</wdk:input>
+			
+			<wdk:link name="wdkSave">
+				<label>Salva</label>
+				<type>button</type>
+				<action>
+					<type>process</type>
+					<function>
+						<name>validateStartDate</name>
+						<arg>'startDate'</arg>
+						<arg>'-'</arg>
+					</function>
+				</action>
+				<action>
+					<type>process</type>
+					<function>
+						<name>validateEndTime</name>
+					</function>
+				</action>
+				<action>
+					<type>submit</type>
+					<href>/custom/ribaltamento/offeringEdit.xml</href>
+				</action>
+				<field>
+					<name>actionKey</name>
+					<value>save</value>
+				</field>
+				<field>
+					<name>courseId</name>
+					<value><xsp:expr>courseId</xsp:expr></value>
+				</field>
+				<xsp:logic>
+				if (isEdit)
+				{
+				</xsp:logic>
+					<field>
+						<name>actionMode</name>
+						<value>edit</value>
+					</field>
+					<field>
+						<name>offeringId</name>
+						<value><xsp:expr>offeringId</xsp:expr></value>
+					</field>
+				<xsp:logic>
+				}
+				</xsp:logic>
+			</wdk:link>
+			
+			<wdk:link name="wdkCancel">
+				<label>Annulla</label>
+				<type>button</type>
+				<xsp:logic>
+				if (isEdit)
+				{
+				</xsp:logic>
+					<href>/custom/ribaltamento/offeringDetails.xml</href>
+					<field>
+						<name>courseId</name>
+						<value><xsp:expr>courseId</xsp:expr></value>
+					</field>
+					<field>
+						<name>offeringId</name>
+						<value><xsp:expr>offeringId</xsp:expr></value>
+					</field>
+				<xsp:logic>
+				}
+				else
+				{
+				</xsp:logic>
+					<href>/custom/ribaltamento/courseDetails.xml</href>
+					<field>
+						<name>courseId</name>
+						<value><xsp:expr>courseId</xsp:expr></value>
+					</field>
+				<xsp:logic>
+				}
+				</xsp:logic>
+			</wdk:link>
+			
+			<wdk:validatorWidget>
+				<saveLink>wdkSave</saveLink>
+			</wdk:validatorWidget>
+			
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>

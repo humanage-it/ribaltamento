@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsp:page xmlns:xsp="http://www.apache.org/1999/XSP/Core" xmlns:wdk="http://www.saba.com/XML/WDK" xmlns:wdktags="http://www.saba.com/XML/WDK/taglib" language="java">
+	<xsp:structure>
+		<xsp:include>humanage.ribaltamento.*</xsp:include>
+	</xsp:structure>
+	<wdk:page>
+		<wdk:head>
+			<wdktags:in>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+				<wdktags:param name="title" type="String" required="false"/>
+				<wdktags:param name="number" type="String" required="false"/>
+				<wdktags:param name="startDateFrom" type="String" required="false"/>
+				<wdktags:param name="startDateTo" type="String" required="false"/>
+				<wdktags:param name="offeringStatus" type="String" required="false"/>
+				<!-- hack to make Print and Export work -->
+				<wdktags:param name="doFilePrint" type="String" required="false"/>
+				<wdktags:param name="doFileExport" type="String" required="false"/>
+				<!-- hack to make Table paging work -->
+				<wdktags:param name="wdkResultactionKey" type="String" required="false"/>
+			</wdktags:in>
+			<wdktags:out>
+				<wdktags:param name="actionKey" type="String" required="true"/>
+			</wdktags:out>
+		</wdk:head>
+		<wdk:form method="post">
+			<wdk:model>
+				<xsp:logic>
+				OfferingFinderCommand finderCommand = new OfferingFinderCommand();
+				
+				if (doFilePrint.equals("PrintFileHandler"))
+				{
+					actionKey = "search";
+				}
+				if (doFileExport.equals("ExportFileHandler"))
+				{
+					actionKey = "search";
+				}
+				if (wdkResultactionKey.equals("jump"))
+				{
+					actionKey = "search";
+				}
+				</xsp:logic>
+				<wdktags:execute commandObj="finderCommand">
+				</wdktags:execute>
+				
+				<xsp:logic>
+				if (actionKey.equals("search"))
+				{
+					OfferingSearchCommand searchCommand = new OfferingSearchCommand();
+				</xsp:logic>
+					<wdktags:execute commandObj="searchCommand">
+						<param name="title" expr="title" mode="in" type="String"/>
+						<param name="number" expr="number" mode="in" type="String"/>
+						<param name="startDateFrom" expr="startDateFrom" mode="in" type="String"/>
+						<param name="startDateTo" expr="startDateTo" mode="in" type="String"/>
+						<param name="offeringStatus" expr="offeringStatus" mode="in" type="String"/>
+					</wdktags:execute>
+				<xsp:logic>
+				}
+				</xsp:logic>
+			</wdk:model>
+		</wdk:form>
+		
+		<wdk:widgets>
+			<wdk:pageTitle name="title">
+				<title>
+					Gestione delle edizioni
+				</title>
+			</wdk:pageTitle>
+			
+			<wdk:pageText name="pageText">
+				<label>
+				</label>
+			</wdk:pageText>
+			
+			<wdk:input name="wdkTitle">
+				<id>title</id>
+				<label>Titolo</label>
+				<value><xsp:expr>title</xsp:expr></value>
+				<sizeType>medium</sizeType>
+			</wdk:input>
+			
+			<wdk:input name="wdkNumber">
+				<id>number</id>
+				<label>ID Edizione</label>
+				<value><xsp:expr>number</xsp:expr></value>
+				<sizeType>medium</sizeType>
+			</wdk:input>
+			
+			<wdk:dateInput name="wdkStartFrom">
+				<id>startDateFrom</id>
+				<label>Data aula da</label>
+				<enable>true</enable>
+				<value><xsp:expr>startDateFrom</xsp:expr></value>
+			</wdk:dateInput>
+			
+			<wdk:dateInput name="wdkStartTo">
+				<id>startDateTo</id>
+				<label>Data aula a</label>
+				<enable>true</enable>
+				<value><xsp:expr>startDateTo</xsp:expr></value>
+			</wdk:dateInput>
+			
+			<wdk:list name="wdkStatus">
+				<id>offeringStatus</id>
+				<label>Visualizza</label>
+				<type>select</type>
+				<wdktags:attachTo path="Finder/OfferingStatuses"/>
+				<wdktags:repeat name="items" path="Item">
+					<option>
+						<value><wdktags:nodeRef source="items" path="Value"/></value>
+						<text><wdktags:nodeRef source="items" path="Name"/></text>
+					</option>
+				</wdktags:repeat>
+				<selection>
+					<value><xsp:expr>offeringStatus</xsp:expr></value>
+				</selection>
+				<showBlank>false</showBlank>
+			</wdk:list>
+			
+			<wdk:link name="wdkSearch">
+				<id>search</id>
+				<label>Ricerca</label>
+				<type>button</type>
+				<do>search</do>
+				<action>
+					<href>/custom/ribaltamento/offeringSearch.xml</href>
+				</action>
+			</wdk:link>
+			
+			<wdk:table name="wdkResult">
+				<showEmptyTableText>true</showEmptyTableText>
+				<emptyTableText>Nessuna edizione trovata.</emptyTableText>
+				<export>true</export>
+				<print>true</print>
+				<modifyTable>false</modifyTable>
+				<disablePaging>false</disablePaging>
+				<pageSize>20</pageSize>
+				<width>570</width>
+				<head>
+					<column>Titolo</column>
+					<column>ID</column>
+					<column>Sede</column>
+					<column>Data aula</column>
+					<column>Archiviata</column>
+				</head>
+				<wdktags:attachTo path="Result"/>
+				<row path="Offering">
+					<xsp:logic>
+					String isArchivedLabel = WDKDomUtils.getNodeTextValue(wdkwidgetNode, "IsArchived", wdkWidgetMaster.getXPathCache());
+					boolean isArchived = isArchivedLabel.substring(0, 1).equals("S");
+					String href = isArchived ? "/custom/ribaltamento/offeringRoster.xml" : "/custom/ribaltamento/offeringDetails.xml";
+					</xsp:logic>
+					<column>
+						<wdk:link name="offeringDetailsLink">
+							<label><wdktags:nodeRef path="Title"></wdktags:nodeRef></label>
+							<href><xsp:expr>href</xsp:expr></href>
+							<field>
+								<name>offeringId</name>
+								<value><wdktags:nodeRef path="Id"></wdktags:nodeRef></value>
+							</field>
+							<field>
+								<name>courseId</name>
+								<value><wdktags:nodeRef path="CourseId"></wdktags:nodeRef></value>
+							</field>
+							<xsp:logic>
+							if (isArchived)
+							{
+							</xsp:logic>
+							<field>
+								<name>actionKey</name>
+								<value>step5</value>
+							</field>
+							<xsp:logic>
+							}
+							</xsp:logic>
+						</wdk:link>
+					</column>
+					<column><wdktags:nodeRef path="OfferingNumber"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="Location"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="StartDate"></wdktags:nodeRef></column>
+					<column><wdktags:nodeRef path="IsArchived"></wdktags:nodeRef></column>
+				</row>
+			</wdk:table>
+		</wdk:widgets>
+	</wdk:page>
+</xsp:page>
