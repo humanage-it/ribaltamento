@@ -37,21 +37,42 @@ extends SabaWebCommand
 		visitResult(visitor, result);
 	}
 	
-	public void moveToTrash() throws LocatorContextNotSetException, SabaException
+//	public void moveToTrash() throws LocatorContextNotSetException, SabaException
+//	{
+//		ServiceLocator locator = ServiceLocator.getClientInstance();
+//		
+//
+//		DomainHome domainHome = (DomainHome)locator.getHome(Delegates.kDomain);
+//		Collection domains = domainHome.findByName("Trash");
+//		Domain trash = (Domain)domains.iterator().next();
+//		
+//		OfferingManager offeringManager = (OfferingManager)locator.getManager(Delegates.kOfferingManager);
+//
+//		List<Offering> result = doSearch();
+//		for (Offering o : result)
+//		{
+//			ILTOfferingReference offering = (ILTOfferingReference)ServiceLocator.getReference(o.Id);
+//			offeringManager.changeSecurityDomain(offering, trash);
+//		}
+//	}
+	
+	public void moveToTrash(ServiceLocator locator) throws LocatorContextNotSetException, SabaException
 	{
-		ServiceLocator locator = ServiceLocator.getClientInstance();
-		
+
 		DomainHome domainHome = (DomainHome)locator.getHome(Delegates.kDomain);
 		Collection domains = domainHome.findByName("Trash");
 		Domain trash = (Domain)domains.iterator().next();
+		Debug.trace("HUMANAGE: found domain trash " +trash.getDisplayName());
 		
 		OfferingManager offeringManager = (OfferingManager)locator.getManager(Delegates.kOfferingManager);
 
 		List<Offering> result = doSearch();
+		Debug.trace("HUMANAGE: offering search results " +result.size());
 		for (Offering o : result)
 		{
 			ILTOfferingReference offering = (ILTOfferingReference)ServiceLocator.getReference(o.Id);
 			offeringManager.changeSecurityDomain(offering, trash);
+			Debug.trace("HUMANAGE: changed domain for offering " + offering.getId() + " - " + offering.getPrimaryKey());
 		}
 	}
 	
