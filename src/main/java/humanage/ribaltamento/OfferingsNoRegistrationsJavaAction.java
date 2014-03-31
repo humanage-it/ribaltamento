@@ -11,6 +11,6 @@ implements IJavaNotificationAction
 	throws SabaException
 	{
 		OfferingsNoRegistrationsCommand command = new OfferingsNoRegistrationsCommand();
-		command.moveToTrash();
+		command.moveToTrash(locator);
 	}
 }
