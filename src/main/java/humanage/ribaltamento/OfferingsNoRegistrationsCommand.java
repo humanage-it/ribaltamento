@@ -33,21 +33,25 @@ extends SabaWebCommand
 	
 	public void doExecute(HttpServletRequest request, IXMLVisitor visitor) throws Exception
 	{
-		List<Offering> result = doSearch();
+		ServiceLocator locator = super.getServiceLocator();
+		List<Offering> result = doSearch(locator);
 		visitResult(visitor, result);
 	}
 	
 	public void moveToTrash() throws LocatorContextNotSetException, SabaException
 	{
-		ServiceLocator locator = ServiceLocator.getClientInstance();
-		
+		moveToTrash(ServiceLocator.getClientInstance());
+	}
+	
+	public void moveToTrash(ServiceLocator locator) throws LocatorContextNotSetException, SabaException
+	{
 		DomainHome domainHome = (DomainHome)locator.getHome(Delegates.kDomain);
 		Collection domains = domainHome.findByName("Trash");
 		Domain trash = (Domain)domains.iterator().next();
 		
 		OfferingManager offeringManager = (OfferingManager)locator.getManager(Delegates.kOfferingManager);
 
-		List<Offering> result = doSearch();
+		List<Offering> result = doSearch(locator);
 		for (Offering o : result)
 		{
 			ILTOfferingReference offering = (ILTOfferingReference)ServiceLocator.getReference(o.Id);
@@ -73,7 +77,7 @@ extends SabaWebCommand
 		visitor.endVisit(null, "Result");
 	}
 	
-	private List<Offering> doSearch()
+	private List<Offering> doSearch(ServiceLocator locator)
 	{
 		List<Offering> result = new ArrayList<Offering>();
 		
@@ -84,7 +88,6 @@ extends SabaWebCommand
 		
 		try
 		{
-			ServiceLocator locator = super.getServiceLocator();
 			String siteName = locator.getSabaPrincipal().getSiteName();
 			conmanager = locator.getConnectionManager();
 			connection = conmanager.getConnection(siteName);
